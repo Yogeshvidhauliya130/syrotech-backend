@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Rahul",
+    "email": "rahul@support.com",
+    "password": "rahul123",
+    "approved": true,
+    "role": "support"
+  },
+  {
+    "name": "Amit",
+    "email": "amit@support.com",
+    "password": "amit123",
+    "approved": true,
+    "role": "support"
+  },
+  {
+    "name": "Neha",
+    "email": "neha@support.com",
+    "password": "neha123",
+    "approved": true,
+    "role": "support"
+  },
+  {
+    "name": "Suresh",
+    "email": "suresh@support.com",
+    "password": "suresh123",
+    "approved": true,
+    "role": "support"
+  }
+]
