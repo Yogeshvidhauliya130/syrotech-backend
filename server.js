@@ -14,7 +14,13 @@ const app        = express();
 const PORT       = process.env.PORT       || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || "syrotech_secret";
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://syrotech-frontend.vercel.app",
+    "http://localhost:5173"
+  ],
+  credentials: true
+}));
 app.use(express.json({ limit: "10mb" })); // ✅ Increased limit for base64 images
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
