@@ -48,8 +48,13 @@ const ticketSchema = new mongoose.Schema({
   rmaSentAt:        { type: String,  default: null },
   rmaSentBy:        { type: String,  default: "" },
 
-  // ✅ NEW: Issue history for repeat customers
+// ✅ NEW: Issue history for repeat customers
   issueHistory: { type: Array, default: [] },
+
+  // ✅ NEW: Resolution fields
+  resolutionNotes:     { type: String, default: "" },
+  resolutionTimeTaken: { type: String, default: "" },
+  resolvedBy:          { type: String, default: "" },
 
 }, { timestamps: true });
 
