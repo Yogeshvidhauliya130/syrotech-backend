@@ -20,6 +20,9 @@ const ticketSchema = new mongoose.Schema({
   country:      { type: String, default: "" },
   pincode:      { type: String, default: "" },
 
+  // ✅ NEW: Source of ticket — "user" = customer raised, "support" = support person raised
+  source:       { type: String, default: "user" },
+
   // Feedback fields
   feedbackRating:     { type: Number,  default: null },
   feedbackComment:    { type: String,  default: "" },
@@ -35,10 +38,10 @@ const ticketSchema = new mongoose.Schema({
   reassignedAt:    { type: String, default: null },
   reassignHistory: { type: Array,  default: [] },
 
-  // ✅ NEW: Product Image (base64)
+  // Product Image (base64)
   productImage: { type: String, default: "" },
 
-  // ✅ NEW: RMA fields
+  // RMA fields
   rmaStatus:        { type: Boolean, default: false },
   rmaReason:        { type: String,  default: "" },
   rmaCenterName:    { type: String,  default: "" },
@@ -48,10 +51,10 @@ const ticketSchema = new mongoose.Schema({
   rmaSentAt:        { type: String,  default: null },
   rmaSentBy:        { type: String,  default: "" },
 
-// ✅ NEW: Issue history for repeat customers
+  // Issue history for repeat customers
   issueHistory: { type: Array, default: [] },
 
-  // ✅ NEW: Resolution fields
+  // Resolution fields
   resolutionNotes:     { type: String, default: "" },
   resolutionTimeTaken: { type: String, default: "" },
   resolvedBy:          { type: String, default: "" },
