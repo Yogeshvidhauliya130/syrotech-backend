@@ -58,7 +58,9 @@ const ticketSchema = new mongoose.Schema({
   resolutionNotes:     { type: String, default: "" },
   resolutionTimeTaken: { type: String, default: "" },
   resolvedBy:          { type: String, default: "" },
+  ticketNumber:        { type: Number, default: null },
 
 }, { timestamps: true });
 
 module.exports = mongoose.model("Ticket", ticketSchema);
+

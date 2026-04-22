@@ -260,7 +260,12 @@ app.get("/tickets", async (req, res) => {
 ══════════════════════════════════ */
 app.post("/tickets", async (req, res) => {
   try {
-    const ticket = await Ticket.create(req.body);
+    // ✅ Assign permanent global ticket number
+    const last = await Ticket.findOne({ ticketNumber: { $exists: true } })
+      .sort({ ticketNumber: -1 })
+      .select("ticketNumber");
+    const nextNumber = last ? last.ticketNumber + 1 : 1;
+    const ticket = await Ticket.create({ ...req.body, ticketNumber: nextNumber });
     res.status(201).json({ ...ticket.toObject(), id: ticket._id.toString() });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
