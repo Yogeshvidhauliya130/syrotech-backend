@@ -170,17 +170,26 @@ async function migrateOldTickets() {
 }
 
 /* ══════════════════════════════════
-   SIGNUP
+   SIGNUP  ✅ UPDATED: supports customer role + phone + companyName
 ══════════════════════════════════ */
 app.post("/api/signup", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, phone, companyName, role } = req.body;
     if (!name || !email || !password)
       return res.status(400).json({ error: "All fields required." });
     const exists = await User.findOne({ email: email.toLowerCase() });
     if (exists) return res.status(400).json({ error: "Email already registered." });
-    const hashed = await bcrypt.hash(password, 10);
-    await User.create({ name, email: email.toLowerCase(), password: hashed, role: "user", approved: false });
+    const hashed    = await bcrypt.hash(password, 10);
+    const finalRole = role === "customer" ? "customer" : "user";
+    await User.create({
+      name,
+      email:       email.toLowerCase(),
+      password:    hashed,
+      phone:       phone       || "",
+      companyName: companyName || "",
+      role:        finalRole,
+      approved:    false,
+    });
     res.json({ message: "Account created! Wait for admin approval." });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -204,7 +213,7 @@ app.post("/api/login", async (req, res) => {
     if (!match) return res.status(400).json({ error: "Wrong password." });
     if (!user.approved) return res.status(403).json({ error: "Account not approved yet." });
     const token = jwt.sign({ email: user.email, role: user.role, name: user.name }, JWT_SECRET, { expiresIn: "12h" });
-    res.json({ token, user: { email: user.email, role: user.role, name: user.name } });
+    res.json({ token, user: { email: user.email, role: user.role, name: user.name, companyName: user.companyName || "" } });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
@@ -239,7 +248,7 @@ app.delete("/api/users/:email", async (req, res) => {
 });
 
 /* ══════════════════════════════════
-   ✅ NEW: GET RMA CENTERS
+   ✅ GET RMA CENTERS
 ══════════════════════════════════ */
 app.get("/api/rma-centers", (req, res) => {
   res.json(RMA_CENTERS);
@@ -291,6 +300,32 @@ app.delete("/tickets/:id", async (req, res) => {
     await Ticket.findByIdAndDelete(req.params.id);
     res.json({ message: "Deleted." });
   } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+/* ══════════════════════════════════
+   ✅ BACKUP ENDPOINT
+══════════════════════════════════ */
+app.get("/api/backup", async (req, res) => {
+  const key = req.query.key;
+  if (key !== "syrotech2025") {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  try {
+    const tickets = await Ticket.find().lean();
+    const users   = await User.find({}, "-password").lean();
+    const backup  = {
+      exportedAt:   new Date().toISOString(),
+      totalTickets: tickets.length,
+      totalUsers:   users.length,
+      tickets,
+      users,
+    };
+    res.setHeader("Content-Disposition", `attachment; filename=syrotech_backup_${new Date().toISOString().slice(0,10)}.json`);
+    res.setHeader("Content-Type", "application/json");
+    res.send(JSON.stringify(backup, null, 2));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 /* ══════════════════════════════════
