@@ -180,16 +180,19 @@ app.post("/api/signup", async (req, res) => {
     const exists = await User.findOne({ email: email.toLowerCase() });
     if (exists) return res.status(400).json({ error: "Email already registered." });
     const hashed    = await bcrypt.hash(password, 10);
-    const finalRole = role === "customer" ? "customer" : "user";
-    await User.create({
-      name,
-      email:       email.toLowerCase(),
-      password:    hashed,
-      phone:       phone       || "",
-      companyName: companyName || "",
-      role:        finalRole,
-      approved:    false,
-    });
+    const finalRole = role === "customer" ? "customer" : role === "support" ? "support" : "user";
+await User.create({
+  name,
+  email:          email.toLowerCase(),
+  password:       hashed,
+  phone:          phone                  || "",
+  companyName:    companyName            || "",
+  role:           finalRole,
+  approved:       false,
+  city:           req.body.city          || "",
+  country:        req.body.country       || "",
+  specialization: req.body.specialization || [],
+});
     res.json({ message: "Account created! Wait for admin approval." });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
