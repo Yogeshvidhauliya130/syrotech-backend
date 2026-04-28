@@ -24,6 +24,9 @@ const ticketSchema = new mongoose.Schema({
   // ✅ NEW: Source of ticket — "user" = customer raised, "support" = support person raised
   source:       { type: String, default: "user" },
 
+  // ✅ NEW: How ticket was raised — call, email, whatsapp, walk-in
+raisedVia:    { type: String, default: "call" },
+
   // Feedback fields
   feedbackRating:     { type: Number,  default: null },
   feedbackComment:    { type: String,  default: "" },
