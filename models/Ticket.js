@@ -18,6 +18,7 @@ const ticketSchema = new mongoose.Schema({
   resolvedAt:   { type: String, default: null },
   createdAt:    { type: String, default: null },
   city:         { type: String, default: "" },
+  state:        { type: String, default: "" },
   companyName:  { type: String, default: "" },
   country:      { type: String, default: "" },
   pincode:      { type: String, default: "" },
