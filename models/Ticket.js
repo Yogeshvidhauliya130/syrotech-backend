@@ -10,7 +10,7 @@ const ticketSchema = new mongoose.Schema({
   phone:        { type: String, default: "" },
   description:  { type: String, default: "" },
   assignTo:     { type: String, default: "" },
-  status:       { type: String, default: "pending" },
+ status: { type: String, default: "open" },
   raisedBy:     { type: String, default: "" },
   raisedByName: { type: String, default: "" },
   date:         { type: String, default: "" },
