@@ -104,35 +104,53 @@ async function seedSupportPersons() {
     // ═══ OLT ═══
     { name: "Ankush Pal", email: "ankush.pal@syrotech.com", password: "ankush123", specialization: ["OLT"], level: 1, zone: "all", city: "", country: "India", phone: "" },
     { name: "Shailendra Singh", email: "shailendra.singh@syrotech.com", password: "shailendra123", specialization: ["OLT"], level: 1, zone: "all", city: "", country: "India", phone: "" },
-    { name: "Yogesh Kumar", email: "yogesh.kumar@goip.in", password: "yogesh123", specialization: ["OLT"], level: 2, zone: "all", city: "", country: "India", phone: "" },
-    { name: "Udit Pathak", email: "udit.pathak@syrotech.com", password: "udit123", specialization: ["OLT"], level: 3, zone: "all", city: "", country: "India", phone: "" },
-    { name: "Arjun Kumar", email: "arjun.kumar@syrotech.com", password: "arjun123", specialization: ["OLT"], level: 3, zone: "all", city: "", country: "India", phone: "" },
+    { name: "Yogesh Kumar", email: "yogesh.kumar@goip.in", password: "yogesh123", specialization: ["OLT"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+    { name: "Udit Pathak", email: "udit.pathak@syrotech.com", password: "udit123", specialization: ["OLT"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+    { name: "Arjun Kumar", email:"arjun.kumar@syrotech.com", password: "arjun123", specialization: ["OLT"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+    { name: "Harish Singh Bisht",email:"harish.bisht@syrotech.com", password: "harish123", specialization: ["OLT","ONT"], level: 2, zone: "all", city: "", country: "India", phone: "" },
+    { name: "Gurupreet Singh", email: "gurupreet.singh@syrotech.com", password: "gurupreet123", specialization: ["OLT"], level: 2, zone: "all", city: "", country: "India", phone: "" },
+    { name: "Nitesh Kumar Yadav", email: "nitesh.kumar@syrotech.com", password: "nitesh123", specialization: ["OLT","OLT"], level: 3, zone: "all", city: "", country: "India", phone: "" },
+    
 
     // ═══ ONT ═══
     { name: "Harish Bind", email: "harish.bind@syrotech.com", password: "harish123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
     { name: "Anuj Kumar", email: "anuj.kumar@syrotech.com", password: "anuj123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
-    { name: "Ayush Sharma", email: "ayush.sharma@syrotech.com", password: "ayush123", specialization: ["ONT"], level: 2, zone: "all except south", city: "", country: "India", phone: "" },
-    { name: "Manish Kumar Singh", email: "manish.singh@syrotech.com", password: "manish123", specialization: ["ONT"], level: 3, zone: "all except south", city: "", country: "India", phone: "" },
-    { name: "Kanhaiya Kumar", email: "kanhaiya.kumar@syrotech.com", password: "kanhaiya123", specialization: ["ONT", "Networking Switches", "Grandstream UC","Grandstream Networking"], level: 3, zone: "all except south", city: "", country: "India", phone: "" },
+    { name: "Ayush Sharma", email: "ayush.sharma@syrotech.com", password: "ayush123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+    { name: "Manish Kumar Singh", email: "manish.singh@syrotech.com", password: "manish123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+    { name: "Kanhaiya Kumar", email: "kanhaiya.kumar@syrotech.com", password: "kanhaiya123", specialization: ["ONT", "Networking Switch", "Grandstream UC", "Grandstream Networking"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+    { name: "Amit Kumar das", email: "amit.das@syrotech.com", password: "amit123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+    { name: "Debashish Halder", email: "debashish.halder@syrotech.com", password: "debashish123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+    { name: "Biju Nayak", email: "biju.nayak@syrotech.com", password: "biju123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+    { name: "Adarsh Kumar", email: "adarsh.k@syrotech.com", password: "adarsh123", specialization: ["ONT"], level: 1, zone: "South Region", city: "", country: "India", phone: "" },
+    { name: "S.K.Seenivasan", email: "seenivasan.sk@goip.in", password: "seenivasan123", specialization: ["ONT"], level: 1, zone: "South Region", city: "", country: "India", phone: "" },
+    { name: "Umesh Bari", email: "umesh.bari@syrotech.com", password: "umesh123", specialization: ["ONT"], level: 2, zone: "all except south", city: "", country: "India", phone: "" },
+    { name: "Vivek Kumar", email: "vivek.kumar@syrotech.com", password: "vivek123", specialization: ["ONT"], level: 2, zone: "all except south", city: "", country: "India", phone: "" },
+    { name: "Shekhar Rana", email: "shekhar.rana@syrotech.com", password: "shekhar123", specialization: ["ONT"], level: 2, zone: "all except south", city: "", country: "India", phone: "" },
+    //{ name: "Harish Singh Bisht", email: "harish.bisht@syrotech.com", password: "harish123", specialization: ["ONT", "OLT"], level: 2, zone: "all ", city: "", country: "India", phone: "" },
+     // { name: "Nitesh Kumar Yadav", email: "nitesh.kumar@syrotech.com", password: "nitesh123", specialization: ["OLT"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 
     // ═══ SFP & MEDIA CONVERTER ═══
-    { name: "RamTirth Bhargav", email: "ramtirth.bhargav@syrotech.com", password: "ramtirth123", specialization: ["Optical Transceivers", "Media Converter"], level: 1, zone: "all", city: "", country: "India", phone: "" },
-    { name: "Hargovind Manya", email: "hargovind.manya@syrotech.com", password: "hargovind123", specialization: ["Optical Transceivers", "Media Converter"], level: 2, zone: "all", city: "", country: "India", phone: "" },
-    { name: "Mohit Mittal", email: "mohit.mittal@goip.in", password: "mohit123", specialization: ["Optical Transceivers", "Media Converter"], level: 3, zone: "all", city: "", country: "India", phone: "" },
-
+    { name: "RamTirth Bhargav", email: "ramtirth.bhargav@syrotech.com", password: "ramtirth123", specialization: ["Media Converter", "Optical Transceivers"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Hargovind Manya", email: "hargovind.manya@syrotech.com", password: "hargovind123", specialization: ["Media Converter", "Optical Transceivers"], level: 2, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Mohit Mittal", email: "mohit.mittal@goip.in", password: "mohit123", specialization: ["Media Converter", "Optical Transceivers"], level: 3, zone: "all", city: "", country: "India", phone: "" },
     // ═══ NETWORKING SWITCHES ═══
-    { name: "Tushar Panchal", email: "tushar.panchal@goip.in", password: "tushar123", specialization: ["Networking Switch", "Grandstream UC","Grandstream Networking"], level: 2, zone: "all", city: "", country: "India", phone: "" },
-    { name: "Baidyanath Mishra", email: "baidyanath.mishra@goip.in", password: "baidyanath123", specialization: ["Networking Switch", "Grandstream UC","Grandstream Networking"], level: 3, zone: "all", city: "", country: "India", phone: "" },
+    //{ name: "Kanhaiya Kumar", email: "kanhaiya.kumar@syrotech.com", password: "kanhaiya123", specialization: ["ONT", "Networking Switches", "Grandstream"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+    { name: "Tushar Panchal", email: "tushar.panchal@goip.in", password: "tushar123", specialization: ["Networking Switch", "Grandstream UC", "Grandstream Networking"], level: 2, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Baidyanath Mishra", email: "baidyanath.mishra@goip.in", password: "baidyanath123", specialization: ["Networking Switch", "Grandstream UC", "Grandstream Networking"], level: 3, zone: "all", city: "", country: "India", phone: "" },
+       // ═══ Grandstream UC & Grandstream Networking ═══
+    // { name: "Kanhaiya Kumar", email: "kanhaiya.kumar@syrotech.com", password: "kanhaiya123", specialization: ["ONT", "Networking Switches", "Grandstream"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+   // { name: "Tushar Panchal", email: "tushar.panchal@goip.in", password: "tushar123", specialization: ["Networking Switches", "Grandstream"], level: 2, zone: "all", city: "", country: "India", phone: "" },
+    //{ name: "Baidyanath Mishra", email: "baidyanath.mishra@goip.in", password: "baidyanath123", specialization: ["Networking Switches", "Grandstream"], level: 3, zone: "all", city: "", country: "India", phone: "" },
+
 
     // ═══ ENTRANCE PRODUCTS ═══
-    { name: "Run Singh", email: "run.singh@goip.in", password: "run123", specialization: ["Entrance Product" ], level: 1, zone: "all", city: "", country: "India", phone: "" },
-    { name: "Gagandeep Sodhi", email: "gagandeep.sodhi@goip.in", password: "gagan123", specialization: ["Entrance Product"], level: 2, zone: "all", city: "", country: "India", phone: "" },
-    { name: "Rabi Sharma", email: "rabi.sharma@goip.in", password: "rabi123", specialization: ["Entrance Product"], level: 3, zone: "all", city: "", country: "India", phone: "" },
-
+    { name: "Run Singh", email: "run.singh@goip.in", password: "run123", specialization: ["Entrance Product"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Gagandeep Sodhi", email: "gagandeep.sodhi@goip.in", password: "gagan123", specialization: ["Entrance Product"], level: 2, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Rabi Sharma", email: "rabi.sharma@goip.in", password: "rabi123", specialization: ["Entrance Product"], level: 3, zone: "all", city: "", country: "India", phone: "" },
     // ═══ PASSIVE PRODUCTS ═══
     { name: "Archana Verma", email: "archna.verma@goip.in", password: "archana123", specialization: ["Passive Products"], level: 1, zone: "all", city: "", country: "India", phone: "" },
-    { name: "Kishan Kumar", email: "kishan.kumar@goip.in", password: "kishan123", specialization: ["Passive Products"], level: 2, zone: "all", city: "", country: "India", phone: "" },
-    { name: "Akhil Sharma", email: "akhil.sharma@goip.in", password: "akhil123", specialization: ["Passive Products"], level: 3, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Kishan Kumar", email: "kishan.kumar@goip.in", password: "kishan123", specialization: ["Passive Products"], level: 2, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Akhil Sharma", email: "akhil.sharma@goip.in", password: "akhil123", specialization: ["Passive Products"], level: 3, zone: "all", city: "", country: "India", phone: "" },
   ];
  
 
@@ -142,12 +160,22 @@ async function seedSupportPersons() {
       const hashed = await bcrypt.hash(p.password, 10);
       await User.create({ ...p, password: hashed, role: "support", approved: true });
       console.log("✅ Added support person:", p.name);
-    } else {
-      await User.findOneAndUpdate(
-  { email: p.email },
-  { $set: { specialization: p.specialization, city: p.city, country: p.country, phone: p.phone, level: p.level, zone: p.zone } }
-);
-    }
+   } else {
+  await User.findOneAndUpdate(
+    { email: p.email },
+    { $set: { 
+        specialization: p.specialization, 
+        city: p.city, 
+        country: p.country, 
+        phone: p.phone, 
+        level: p.level, 
+        zone: p.zone,
+        approved: true,
+        role: "support"
+    }}
+  );
+  console.log("✅ Updated:", p.name, "level:", p.level, "zone:", p.zone);
+}
   }
 }
 
@@ -230,6 +258,17 @@ app.post("/api/login", async (req, res) => {
 /* ══════════════════════════════════
    GET ALL USERS
 ══════════════════════════════════ */
+
+app.get("/api/users/me/:email", async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.params.email.toLowerCase() }, "-password");
+    if (!user) return res.status(404).json({ error: "User not found." });
+    res.json(user);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+
+
 app.get("/api/users", async (req, res) => {
   try {
     const users = await User.find({}, "-password");
