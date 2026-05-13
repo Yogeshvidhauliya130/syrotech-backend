@@ -314,6 +314,13 @@ app.delete("/api/users/:email", async (req, res) => {
 app.get("/api/rma-centers", (req, res) => {
   res.json(RMA_CENTERS);
 });
+app.get("/api/products", (req, res) => {
+  res.json({
+    "OLT": {}, "ONT": {}, "Media Converter": {}, "Optical Transceivers": {},
+    "Networking Switch": {}, "Entrance Product": {}, "Passive Products": {},
+    "Grandstream UC": {}, "Grandstream Networking": {}
+  });
+});
 
 /* ══════════════════════════════════
    GET ALL TICKETS
