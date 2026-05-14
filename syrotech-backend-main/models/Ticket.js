@@ -70,8 +70,9 @@ softwareVersion: { type: String, default: "" },
 qvcCode:         { type: String, default: "" },
   ticketNumber:        { type: Number, default: null },
   customerType: { type: String, default: "" },
-reopenedAt:   { type: String, default: null },
-reopenCount:  { type: Number, default: 0 },
+reopenedAt:           { type: String, default: null },
+  reopenCount:          { type: Number, default: 0 },
+  originalDescription:  { type: String, default: "" },
 
 }, { timestamps: true });
 
