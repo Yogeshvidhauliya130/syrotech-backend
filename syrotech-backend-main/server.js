@@ -342,7 +342,16 @@ app.post("/tickets", async (req, res) => {
       .sort({ ticketNumber: -1 })
       .select("ticketNumber");
     const nextNumber = last ? last.ticketNumber + 1 : 1;
-    const ticket = await Ticket.create({ ...req.body, ticketNumber: nextNumber });
+    const now = new Date().toISOString();
+const ticket = await Ticket.create({
+  ...req.body,
+  ticketNumber: nextNumber,
+  status: req.body.status || "open",
+  createdAt: now,
+  firstDescription: req.body.description,
+  firstCreatedAt: now,
+  firstRaisedByName: req.body.raisedByName,
+});
     res.status(201).json({ ...ticket.toObject(), id: ticket._id.toString() });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -352,9 +361,22 @@ app.post("/tickets", async (req, res) => {
 ══════════════════════════════════ */
 app.patch("/tickets/:id", async (req, res) => {
   try {
-    const ticket = await Ticket.findByIdAndUpdate(
-      req.params.id, { $set: req.body }, { new: true }
-    );
+    const updateData = req.body;
+const existing = await Ticket.findById(req.params.id);
+
+if (updateData.status === "reopened" && existing) {
+  updateData.firstDescription    = existing.firstDescription    || existing.description;
+  updateData.firstCreatedAt      = existing.firstCreatedAt      || existing.createdAt;
+  updateData.firstRaisedByName   = existing.firstRaisedByName   || existing.raisedByName;
+  updateData.firstResolvedNotes  = existing.firstResolvedNotes  || existing.resolutionNotes;
+  updateData.firstResolvedAt     = existing.firstResolvedAt     || existing.resolvedAt;
+  updateData.firstResolvedBy     = existing.firstResolvedBy     || existing.resolvedBy;
+  updateData.firstIsRma          = existing.firstIsRma          || existing.rmaStatus;
+}
+
+const ticket = await Ticket.findByIdAndUpdate(
+  req.params.id, { $set: updateData }, { new: true }
+);
     if (!ticket) return res.status(404).json({ error: "Not found." });
     res.json({ ...ticket.toObject(), id: ticket._id.toString() });
   } catch (err) { res.status(500).json({ error: err.message }); }
