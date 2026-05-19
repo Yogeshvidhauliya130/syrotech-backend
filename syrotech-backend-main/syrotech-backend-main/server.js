@@ -10,8 +10,8 @@ const path     = require("path");
 const User   = require("./models/User");
 
 const Ticket = require("./models/Ticket");
-const { Resend } = require("resend");
-const resend = new Resend(process.env.RESEND_API_KEY);
+
+// ✅ ADD THESE 2 LINES
 
 
 
@@ -437,27 +437,7 @@ app.post("/api/forgot-password", async (req, res) => {
 
     await User.findByIdAndUpdate(user._id, { otp, otpExpiry });
 
-    const { error: emailError } = await resend.emails.send({
-      from: "GO IP Support <onboarding@resend.dev>",
-      to: email,
-      subject: "Your OTP for Password Reset",
-      html: `
-        <div style="font-family:Arial,sans-serif;max-width:420px;margin:auto;padding:24px;border:1px solid #eee;border-radius:10px">
-          <h2 style="color:#2563eb">Password Reset OTP</h2>
-          <p>Hi <strong>${user.name}</strong>,</p>
-          <p>Your OTP to reset your password expires in <strong>10 minutes</strong>.</p>
-          <div style="font-size:36px;font-weight:bold;letter-spacing:10px;color:#ff5a00;margin:20px 0;text-align:center">
-            ${otp}
-          </div>
-          <p style="color:#888;font-size:12px">If you did not request this, ignore this email.</p>
-        </div>
-      `,
-    });
 
-    if (emailError) {
-      console.error("Resend error:", emailError);
-      return res.status(500).json({ error: "Failed to send OTP email. Try again." });
-    }
 
     res.json({ message: "OTP sent to your email." });
   } catch (err) {
