@@ -8,20 +8,10 @@ const jwt      = require("jsonwebtoken");
 const fs       = require("fs");
 const path     = require("path");
 const User   = require("./models/User");
-const nodemailer = require("nodemailer");
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS,
-  },
-});
 const Ticket = require("./models/Ticket");
-
-// ✅ ADD THESE 2 LINES
+const { Resend } = require("resend");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 
 
@@ -447,24 +437,27 @@ app.post("/api/forgot-password", async (req, res) => {
 
     await User.findByIdAndUpdate(user._id, { otp, otpExpiry });
 
-    await transporter.sendMail({
-     from: `"GO IP Global Services" <${process.env.GMAIL_USER}>`,
-      to:      user.email,
+    const { error: emailError } = await resend.emails.send({
+      from: "GO IP Support <onboarding@resend.dev>",
+      to: email,
       subject: "Your OTP for Password Reset",
       html: `
-        <div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;padding:32px;border:1px solid #e5e7eb;border-radius:12px;">
-          <h2 style="color:#ff5a00;margin-bottom:8px;">Password Reset OTP</h2>
-          <p style="color:#374151;">Hello <strong>${user.name}</strong>,</p>
-          <p style="color:#374151;">Use the OTP below to reset your password. It expires in <strong>10 minutes</strong>.</p>
-          <div style="text-align:center;margin:28px 0;">
-            <span style="font-size:38px;font-weight:800;letter-spacing:10px;color:#111827;">${otp}</span>
+        <div style="font-family:Arial,sans-serif;max-width:420px;margin:auto;padding:24px;border:1px solid #eee;border-radius:10px">
+          <h2 style="color:#2563eb">Password Reset OTP</h2>
+          <p>Hi <strong>${user.name}</strong>,</p>
+          <p>Your OTP to reset your password expires in <strong>10 minutes</strong>.</p>
+          <div style="font-size:36px;font-weight:bold;letter-spacing:10px;color:#ff5a00;margin:20px 0;text-align:center">
+            ${otp}
           </div>
-          <p style="color:#6b7280;font-size:13px;">If you did not request this, please ignore this email.</p>
-          <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0;"/>
-          <p style="color:#9ca3af;font-size:12px;">GO IP Global Services</p>
+          <p style="color:#888;font-size:12px">If you did not request this, ignore this email.</p>
         </div>
       `,
     });
+
+    if (emailError) {
+      console.error("Resend error:", emailError);
+      return res.status(500).json({ error: "Failed to send OTP email. Try again." });
+    }
 
     res.json({ message: "OTP sent to your email." });
   } catch (err) {
