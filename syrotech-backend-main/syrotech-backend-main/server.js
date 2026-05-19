@@ -8,6 +8,15 @@ const jwt      = require("jsonwebtoken");
 const fs       = require("fs");
 const path     = require("path");
 const User   = require("./models/User");
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
+  },
+});
 const Ticket = require("./models/Ticket");
 
 // ✅ ADD THESE 2 LINES
@@ -437,7 +446,7 @@ app.post("/api/forgot-password", async (req, res) => {
     await User.findByIdAndUpdate(user._id, { otp, otpExpiry });
 
     await transporter.sendMail({
-     from: `"GO IP Global Services" <yogeshvidhauliya130@gmail.com>`,
+     from: `"GO IP Global Services" <${process.env.GMAIL_USER}>`,
       to:      user.email,
       subject: "Your OTP for Password Reset",
       html: `
@@ -516,35 +525,6 @@ app.post("/api/reset-password", async (req, res) => {
 /* ══════════════════════════════════
    START SERVER
 ══════════════════════════════════ */
-
-const sendOTPEmail = async (toEmail, toName, otp) => {
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer re_8rUs2uzS_KByKDKEGRQinznVxmxGQicGF",
-    },
-    body: JSON.stringify({
-      from: "GO IP Global Services <onboarding@resend.dev>",
-      to: [toEmail],
-      subject: "Your OTP for Password Reset",
-      html: `<div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;padding:32px;border:1px solid #e5e7eb;border-radius:12px;">
-        <h2 style="color:#ff5a00;">Password Reset OTP</h2>
-        <p>Hello <strong>${toName}</strong>,</p>
-        <p>Use the OTP below to reset your password. Expires in <strong>10 minutes</strong>.</p>
-        <div style="text-align:center;margin:28px 0;">
-          <span style="font-size:38px;font-weight:800;letter-spacing:10px;color:#111827;">${otp}</span>
-        </div>
-        <p style="color:#6b7280;font-size:13px;">If you did not request this, ignore this email.</p>
-        <p style="color:#9ca3af;font-size:12px;">GO IP Global Services</p>
-      </div>`,
-    }),
-  });
-  if (!response.ok) {
-    const err = await response.json();
-    throw new Error(JSON.stringify(err));
-  }
-};
 app.listen(PORT, () => {
   console.log(`✅ Server running at http://localhost:${PORT}`);
 });
