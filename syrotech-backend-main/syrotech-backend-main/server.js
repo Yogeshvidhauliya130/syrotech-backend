@@ -6,6 +6,15 @@ const mongoose = require("mongoose");
 const bcrypt   = require("bcryptjs");
 const jwt      = require("jsonwebtoken");
 const fs       = require("fs");
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
+  },
+});
 const path     = require("path");
 const User   = require("./models/User");
 
@@ -435,11 +444,25 @@ app.post("/api/forgot-password", async (req, res) => {
     const otp       = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
 
-    await User.findByIdAndUpdate(user._id, { otp, otpExpiry });
+   await User.findByIdAndUpdate(user._id, { otp, otpExpiry });
 
+await transporter.sendMail({
+  from: `"GO IP Support" <${process.env.GMAIL_USER}>`,
+  to: user.email,
+  subject: "Your OTP for Password Reset",
+  html: `
+    <h2>Password Reset OTP</h2>
+    <p>Hello <b>${user.name}</b>,</p>
+    <p>Your OTP for password reset is:</p>
+    <h1 style="color:#2563eb;letter-spacing:8px;">${otp}</h1>
+    <p>This OTP is valid for <b>10 minutes</b>.</p>
+    <p>If you did not request this, please ignore this email.</p>
+    <br/>
+    <p>regards,<br/>GO IP Global Services Team</p>
+  `,
+});
 
-
-    res.json({ message: "OTP sent to your email." });
+res.json({ message: "OTP sent to your email." });
   } catch (err) {
     console.error("Forgot password error:", err);
     res.status(500).json({ error: "Failed to send OTP. Try again." });
