@@ -6,15 +6,8 @@ const mongoose = require("mongoose");
 const bcrypt   = require("bcryptjs");
 const jwt      = require("jsonwebtoken");
 const fs       = require("fs");
-const nodemailer = require("nodemailer");
-
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS,
-  },
-});
+const { Resend } = require("resend");
+const resend = new Resend(process.env.RESEND_API_KEY);
 const path     = require("path");
 const User   = require("./models/User");
 
@@ -446,8 +439,8 @@ app.post("/api/forgot-password", async (req, res) => {
 
    await User.findByIdAndUpdate(user._id, { otp, otpExpiry });
 
-await transporter.sendMail({
-  from: `"GO IP Support" <${process.env.GMAIL_USER}>`,
+await resend.emails.send({
+  from: "onboarding@resend.dev",
   to: user.email,
   subject: "Your OTP for Password Reset",
   html: `
@@ -458,7 +451,7 @@ await transporter.sendMail({
     <p>This OTP is valid for <b>10 minutes</b>.</p>
     <p>If you did not request this, please ignore this email.</p>
     <br/>
-    <p>regards,<br/>GO IP Global Services Team</p>
+    <p>Regards,<br/>GO IP Global Services Team</p>
   `,
 });
 
