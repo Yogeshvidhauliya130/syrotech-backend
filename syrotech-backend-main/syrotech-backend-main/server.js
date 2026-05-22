@@ -458,7 +458,7 @@ app.post("/api/forgot-password", async (req, res) => {
     await User.findByIdAndUpdate(user._id, { otp, otpExpiry });
 
 await resend.emails.send({
-  from: "noreply@goip.global.in",
+  from: "noreply@goipglobal.in",
   to: user.email,
   subject: "Your OTP for Password Reset",
   html: `
