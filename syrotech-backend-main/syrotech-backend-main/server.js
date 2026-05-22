@@ -159,7 +159,7 @@ async function seedSupportPersons() {
 
 
 
-//  Lockin ticket  
+//  Lockin ticket   support person name 
 { 
   name: "Tejvir Singh", 
   email: "tejvir.singh@goip.in", 
