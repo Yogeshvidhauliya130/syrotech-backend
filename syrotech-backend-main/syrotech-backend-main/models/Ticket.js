@@ -63,6 +63,7 @@ raisedVia:    { type: String, default: "call" },
 
   // Resolution fields
   resolutionNotes:     { type: String, default: "" },
+  resolutionStatus:    { type: String, default: "" },
   resolutionTimeTaken: { type: String, default: "" },
   resolvedBy:          { type: String, default: "" },
   firstDescription:    { type: String, default: "" },
