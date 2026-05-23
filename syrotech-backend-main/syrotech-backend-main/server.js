@@ -30,8 +30,8 @@ app.use(cors({
   ],
   credentials: true
 }));
-app.use(express.json({ limit: "10mb" })); // ✅ Increased limit for base64 images
-app.use(express.urlencoded({ limit: "10mb", extended: true }));
+app.use(express.json({ limit: "20mb" }));
+app.use(express.urlencoded({ limit: "20mb", extended: true }));
 
 
 

@@ -76,6 +76,7 @@ firstIsRma:          { type: Boolean, default: false },
   hardwareVersion: { type: String, default: "" },
   fileName:        { type: String, default: "" },      // ← ADD
 fileBase64:      { type: String, default: "" },   
+logoImage:       { type: String, default: "" },
 softwareVersion: { type: String, default: "" },
 qvcCode:         { type: String, default: "" },
   ticketNumber:        { type: Number, default: null },
