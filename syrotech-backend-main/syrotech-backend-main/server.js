@@ -116,7 +116,7 @@ async function seedSupportPersons() {
     { name: "Gurupreet Singh", email: "gurupreet.singh@syrotech.com", password: "gurupreet123", specialization: ["OLT"], level: 2, zone: "all", city: "", country: "India", phone: "" },
     { name: "Nitesh Kumar Yadav", email: "nitesh.kumar@syrotech.com", password: "nitesh123", specialization: ["OLT","ONT"], level: 3, zone: "all", city: "", country: "India", phone: "" },
     // L4
-    { name: "Nitesh Kumar Yadav", email: "nitesh.kumar1@syrotech.com", password: "nitesh1234", specialization: ["OLT","ONT"], level: 4, zone: "all", city: "", country: "India", phone: "" },
+    { name: "Nitesh Kumar Yadav L4", email: "nitesh.kumar1@syrotech.com", password: "nitesh1234", specialization: ["OLT","ONT"], level: 4, zone: "all", city: "", country: "India", phone: "" },
 
     // ═══ ONT ═══
     { name: "Harish Bind", email: "harish.bind@syrotech.com", password: "harish123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
@@ -140,7 +140,7 @@ async function seedSupportPersons() {
 { name: "Hargovind Manya", email: "hargovind.manya@syrotech.com", password: "hargovind123", specialization: ["Media Converter", "Optical Transceivers"], level: 2, zone: "all", city: "", country: "India", phone: "" },
 { name: "Mohit Mittal", email: "mohit.mittal@goip.in", password: "mohit123", specialization: ["Media Converter", "Optical Transceivers"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 //L4 
-{ name: "Mohit Mittal", email: "mohit.mittal1@goip.in", password: "mohit1234", specialization: ["Media Converter", "Optical Transceivers"], level: 4, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Mohit Mittal L4", email: "mohit.mittal1@goip.in", password: "mohit1234", specialization: ["Media Converter", "Optical Transceivers"], level: 4, zone: "all", city: "", country: "India", phone: "" },
 
 
 
@@ -149,7 +149,7 @@ async function seedSupportPersons() {
     { name: "Tushar Panchal", email: "tushar.panchal@goip.in", password: "tushar123", specialization: ["Networking Switch", "Grandstream UC", "Grandstream Networking"], level: 2, zone: "all", city: "", country: "India", phone: "" },
 { name: "Baidyanath Mishra", email: "baidyanath.mishra@goip.in", password: "baidyanath123", specialization: ["Networking Switch", "Grandstream UC", "Grandstream Networking"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 // L4 
-{ name: "Baidyanath Mishra", email: "baidyanath.mishra1@goip.in", password: "baidyanath1234", specialization: ["Networking Switch", "Grandstream UC", "Grandstream Networking"], level: 4, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Baidyanath Mishra L4", email: "baidyanath.mishra1@goip.in", password: "baidyanath1234", specialization: ["Networking Switch", "Grandstream UC", "Grandstream Networking"], level: 4, zone: "all", city: "", country: "India", phone: "" },
 
 
 // ═══ Grandstream UC & Grandstream Networking ═══
@@ -163,7 +163,7 @@ async function seedSupportPersons() {
 { name: "Gagandeep Sodhi", email: "gagandeep.sodhi@goip.in", password: "gagan123", specialization: ["Entrance Product"], level: 2, zone: "all", city: "", country: "India", phone: "" },
 { name: "Rabi Sharma", email: "rabi.sharma@goip.in", password: "rabi123", specialization: ["Entrance Product"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 // L4 
-{ name: "Rabi Sharma", email: "rabi.sharma1@goip.in", password: "rabi1234", specialization: ["Entrance Product"], level: 4, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Rabi Sharma L4", email: "rabi.sharma1@goip.in", password: "rabi1234", specialization: ["Entrance Product"], level: 4, zone: "all", city: "", country: "India", phone: "" },
 
 
 // ═══ PASSIVE PRODUCTS ═══
@@ -171,7 +171,7 @@ async function seedSupportPersons() {
 { name: "Kishan Kumar", email: "kishan.kumar@goip.in", password: "kishan123", specialization: ["Passive Products"], level: 2, zone: "all", city: "", country: "India", phone: "" },
 { name: "Akhil Sharma", email: "akhil.sharma@goip.in", password: "akhil123", specialization: ["Passive Products"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 // L4 
-{ name: "Akhil Sharma", email: "akhil.sharma1@goip.in", password: "akhil1234", specialization: ["Passive Products"], level: 4, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Akhil Sharma L4", email: "akhil.sharma1@goip.in", password: "akhil1234", specialization: ["Passive Products"], level: 4, zone: "all", city: "", country: "India", phone: "" },
 
 
 //  Lockin ticket   support person name 
