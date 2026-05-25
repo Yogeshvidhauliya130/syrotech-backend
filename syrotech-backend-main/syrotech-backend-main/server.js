@@ -246,7 +246,7 @@ async function migrateOldTickets() {
 ══════════════════════════════════ */
 app.post("/api/signup", async (req, res) => {
   try {
-   const { name, email, password, phone, companyName, customerType, role } = req.body;
+   const { name, email, password, phone, companyName, customerType, role, level, zone } = req.body;
     if (!name || !email || !password)
       return res.status(400).json({ error: "All fields required." });
     const exists = await User.findOne({ email: email.toLowerCase() });
@@ -266,6 +266,8 @@ app.post("/api/signup", async (req, res) => {
   city:           req.body.city          || "",
   country:        req.body.country       || "",
   specialization: req.body.specialization || [],
+  level: level || 1,
+zone: zone || "all",
 });
     res.json({ message: "Account created! Wait for admin approval." });
   } catch (err) { res.status(500).json({ error: err.message }); }
