@@ -336,6 +336,14 @@ app.get("/api/users/me/:email", async (req, res) => {
 });
 
 
+// sales person name filter while creating custoemr account 
+app.get("/api/sales-persons", async (req, res) => {
+  try {
+    const users = await User.find({ role: "user", approved: true }, "name email");
+    res.json(users);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
 
 app.get("/api/users", async (req, res) => {
   try {
