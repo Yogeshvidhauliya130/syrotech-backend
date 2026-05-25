@@ -26,6 +26,8 @@ const JWT_SECRET = process.env.JWT_SECRET || "syrotech_secret";
 app.use(cors({
   origin: [
     "https://syrotech-frontend.vercel.app",
+    "https://syrotech-frontend-vercel.app",
+    "https://ticketing.syrotech.com",
     "http://localhost:5173"
   ],
   credentials: true
