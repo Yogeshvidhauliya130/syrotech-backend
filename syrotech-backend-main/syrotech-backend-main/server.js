@@ -275,12 +275,44 @@ app.post("/api/login", async (req, res) => {
   try {
     const { email, password, role } = req.body;
     if (role === "admin") {
-      if (email === "Admin" && password === "Admin9876") {
-        const token = jwt.sign({ email: "Admin", role: "admin", name: "Administrator" }, JWT_SECRET, { expiresIn: "12h" });
-        return res.json({ token, user: { email: "Admin", role: "admin", name: "Administrator" } });
-      }
-      return res.status(401).json({ error: "Wrong admin credentials." });
-    }
+  // ✅ Admin login
+  if (email === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
+    const token = jwt.sign(
+      { email: process.env.ADMIN_USERNAME, role: "admin", name: "Administrator" },
+      JWT_SECRET, { expiresIn: "12h" }
+    );
+    return res.json({
+      token,
+      user: { email: process.env.ADMIN_USERNAME, role: "admin", name: "Administrator" }
+    });
+  }
+
+  // ✅ HR login
+  if (email === process.env.HR_EMAIL && password === process.env.HR_PASSWORD) {
+    const token = jwt.sign(
+      { email: process.env.HR_EMAIL, role: "hr", name: "HR Admin" },
+      JWT_SECRET, { expiresIn: "12h" }
+    );
+    return res.json({
+      token,
+      user: { email: process.env.HR_EMAIL, role: "hr", name: "HR Admin" }
+    });
+  }
+
+  // ✅ HrAdmin login
+  if (email === process.env.HRADMIN_USERNAME && password === process.env.HRADMIN_PASSWORD) {
+    const token = jwt.sign(
+      { email: process.env.HRADMIN_USERNAME, role: "hradmin", name: "HR Admin" },
+      JWT_SECRET, { expiresIn: "12h" }
+    );
+    return res.json({
+      token,
+      user: { email: process.env.HRADMIN_USERNAME, role: "hradmin", name: "HR Admin" }
+    });
+  }
+
+  return res.status(401).json({ error: "Wrong credentials." });
+}
     const user = await User.findOne({ email: email.toLowerCase(), role });
     if (!user) return res.status(400).json({ error: "No account found." });
     const match = await bcrypt.compare(password, user.password);
