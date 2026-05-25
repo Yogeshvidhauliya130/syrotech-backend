@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
   phone:          { type: String, default: "" },
   companyName:    { type: String, default: "" },
   customerType:   { type: String, default: "" },
+  salesPerson: { type: String, default: "" },
   otp:       { type: String, default: null },
 otpExpiry: { type: Date,   default: null },
 level:     { type: Number, default: 0 },      // ← ADD THIS
