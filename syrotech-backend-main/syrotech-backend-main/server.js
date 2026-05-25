@@ -252,18 +252,19 @@ app.post("/api/signup", async (req, res) => {
     const hashed    = await bcrypt.hash(password, 10);
     const finalRole = role === "customer" ? "customer" : role === "support" ? "support" : "user";
     await User.create({
-      name,
-      email:          email.toLowerCase(),
-      password:       hashed,
-      phone:          phone                  || "",
-      companyName:    companyName            || "",
-      customerType:   customerType           || "",
-      role:           finalRole,
-      approved:       false,
-      city:           req.body.city          || "",
-      country:        req.body.country       || "",
-      specialization: req.body.specialization || [],
-    });
+  name,
+  email:          email.toLowerCase(),
+  password:       hashed,
+  phone:          phone                  || "",
+  companyName:    companyName            || "",
+  customerType:   customerType           || "",
+  salesPerson:    req.body.salesPerson   || "",
+  role:           finalRole,
+  approved:       false,
+  city:           req.body.city          || "",
+  country:        req.body.country       || "",
+  specialization: req.body.specialization || [],
+});
     res.json({ message: "Account created! Wait for admin approval." });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
