@@ -91,7 +91,10 @@ qvcCode:         { type: String, default: "" },
   hrIssue:  { type: String, default: "" },
 reopenedAt:           { type: String, default: null },
   reopenCount:          { type: Number, default: 0 },
+  statusUpdates: { type: Array, default: [] },
+latestStatusUpdate: { type: String, default: "" },
   originalDescription:  { type: String, default: "" },
+  
 
 }, { timestamps: true });
 
