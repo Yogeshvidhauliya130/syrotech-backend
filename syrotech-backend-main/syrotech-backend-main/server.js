@@ -7,6 +7,9 @@ const bcrypt   = require("bcryptjs");
 const jwt      = require("jsonwebtoken");
 const fs       = require("fs");
 const { Resend } = require("resend");
+const twilio = require("twilio");
+const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+const smsOtpStore = {};
 const resend = new Resend(process.env.RESEND_API_KEY);
 const path     = require("path");
 const User   = require("./models/User");
@@ -591,6 +594,54 @@ app.post("/api/reset-password", async (req, res) => {
   }
 });
 
+
+
+
+/* ══════════════════════════════════
+   SEND SMS OTP (Signup verification)
+══════════════════════════════════ */
+app.post("/api/send-sms-otp", async (req, res) => {
+  try {
+    const { phone } = req.body;
+    if (!phone) return res.status(400).json({ error: "Phone number required." });
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    smsOtpStore[phone] = { otp, expiry: Date.now() + 10 * 60 * 1000 };
+
+    await twilioClient.messages.create({
+      body: `Your GO IP Global signup OTP is: ${otp}. Valid for 10 minutes.`,
+      from: process.env.TWILIO_PHONE_NUMBER,
+      to: `+91${phone}`
+    });
+
+    res.json({ message: "OTP sent successfully." });
+  } catch (err) {
+    console.error("SMS OTP error:", err);
+    res.status(500).json({ error: "Failed to send OTP. " + err.message });
+  }
+});
+
+/* ══════════════════════════════════
+   VERIFY SMS OTP (Signup verification)
+══════════════════════════════════ */
+app.post("/api/verify-sms-otp", async (req, res) => {
+  try {
+    const { phone, otp } = req.body;
+    const record = smsOtpStore[phone];
+
+    if (!record) return res.status(400).json({ error: "OTP not sent. Please request again." });
+    if (Date.now() > record.expiry) {
+      delete smsOtpStore[phone];
+      return res.status(400).json({ error: "OTP expired. Please request again." });
+    }
+    if (record.otp !== otp) return res.status(400).json({ error: "Wrong OTP. Try again." });
+
+    delete smsOtpStore[phone];
+    res.json({ message: "OTP verified successfully." });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 /* ══════════════════════════════════
    START SERVER
 ══════════════════════════════════ */
