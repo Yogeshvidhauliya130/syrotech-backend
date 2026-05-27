@@ -16,6 +16,20 @@ const User   = require("./models/User");
 
 const Ticket = require("./models/Ticket");
 
+
+
+
+
+const rateLimit = require("express-rate-limit");
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5,                    // max 5 attempts
+  message: { error: "Too many login attempts. Please try again after 15 minutes." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // ✅ ADD THESE 2 LINES
 
 
@@ -279,7 +293,7 @@ zone: zone || "all",
 /* ══════════════════════════════════
    LOGIN
 ══════════════════════════════════ */
-app.post("/api/login", async (req, res) => {
+app.post("/api/login", loginLimiter, async (req, res) => {
   try {
     const { email, password, role } = req.body;
     if (role === "admin") {
