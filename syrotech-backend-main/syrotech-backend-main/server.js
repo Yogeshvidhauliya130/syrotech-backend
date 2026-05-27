@@ -22,13 +22,51 @@ const Ticket = require("./models/Ticket");
 
 const rateLimit = require("express-rate-limit");
 
-const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5,                    // max 5 attempts
-  message: { error: "Too many login attempts. Please try again after 15 minutes." },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+const loginAttempts = {};
+
+const emailRateLimiter = (req, res, next) => {
+  const email = req.body.email?.toLowerCase();
+  if (!email) return next();
+
+  const now = Date.now();
+  if (!loginAttempts[email]) {
+    loginAttempts[email] = { count: 0, firstAttempt: now };
+  }
+
+  const record = loginAttempts[email];
+
+  // Reset after 15 minutes
+  if (now - record.firstAttempt > 15 * 60 * 1000) {
+    loginAttempts[email] = { count: 0, firstAttempt: now };
+  }
+
+  record.count++;
+
+  if (record.count > 5) {
+    const minutesLeft = Math.ceil((15 * 60 * 1000 - (now - record.firstAttempt)) / 60000);
+    return res.status(429).json({ 
+      error: `Too many login attempts for this account. Try again in ${minutesLeft} minute(s).` 
+    });
+  }
+
+  next();
+};
+
+
+const verifyToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Unauthorized. Please login." });
+  }
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch {
+    return res.status(401).json({ error: "Session expired. Please login again." });
+  }
+};
 
 // ✅ ADD THESE 2 LINES
 
@@ -293,7 +331,7 @@ zone: zone || "all",
 /* ══════════════════════════════════
    LOGIN
 ══════════════════════════════════ */
-app.post("/api/login", loginLimiter, async (req, res) => {
+app.post("/api/login", emailRateLimiter, async (req, res) => {
   try {
     const { email, password, role } = req.body;
     if (role === "admin") {
@@ -341,6 +379,7 @@ app.post("/api/login", loginLimiter, async (req, res) => {
     if (!match) return res.status(400).json({ error: "Wrong password." });
     if (!user.approved) return res.status(403).json({ error: "Account not approved yet." });
     const token = jwt.sign({ email: user.email, role: user.role, name: user.name }, JWT_SECRET, { expiresIn: "12h" });
+    delete loginAttempts[email.toLowerCase()];
    res.json({ token, user: { email: user.email, role: user.role, name: user.name, companyName: user.companyName || "", customerType: user.customerType || "", phone: user.phone || "" } });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -491,7 +530,7 @@ app.delete("/tickets/:id", async (req, res) => {
 ══════════════════════════════════ */
 app.get("/api/backup", async (req, res) => {
   const key = req.query.key;
-  if (key !== "syrotech2025") {
+ if (key !== process.env.BACKUP_SECRET_KEY) {
     return res.status(401).json({ error: "Unauthorized" });
   }
   try {
