@@ -95,8 +95,8 @@ const RMA_CENTERS = [
 mongoose.connect(process.env.MONGO_URI)
   .then(async () => {
     console.log("✅ MongoDB Connected!");
-    await seedSupportPersons();
-    await migrateOldTickets();
+    seedSupportPersons();  // ← Remove await — runs in background!
+    migrateOldTickets();   // ← Remove await — runs in background!
   })
   .catch(err => {
     console.error("❌ MongoDB Failed:", err.message);
