@@ -110,6 +110,11 @@ mongoose.connect(process.env.MONGO_URI)
    ✅ UPDATED WITH REAL TEAM LIST
 ══════════════════════════════════ */
 async function seedSupportPersons() {
+  const count = await User.countDocuments({ role: "support" });
+  if (count >= 35) {
+    console.log("⏭️ Seed skipped!");
+    return;
+  }
     const list = [
     // ═══ OLT ═══
     { name: "Ankush Pal", email: "ankush.pal@syrotech.com", password: "ankush123", specialization: ["OLT"], level: 1, zone: "all", city: "", country: "India", phone: "" },
