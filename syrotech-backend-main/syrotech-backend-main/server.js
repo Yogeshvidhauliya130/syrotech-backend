@@ -725,6 +725,37 @@ app.post("/api/verify-sms-otp", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+/* ══════════════════════════════════
+   FEEDBACK ENDPOINTS
+══════════════════════════════════ */
+app.get("/api/feedback/:ticketId", async (req, res) => {
+  try {
+    const ticket = await Ticket.findById(req.params.ticketId)
+      .select("customer category ticketNumber feedbackRating");
+    if (!ticket) return res.status(404).json({ error: "Ticket not found." });
+    res.json(ticket);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.patch("/api/feedback/:ticketId", async (req, res) => {
+  try {
+    const { feedbackRating } = req.body;
+    if (!feedbackRating || feedbackRating < 1 || feedbackRating > 5)
+      return res.status(400).json({ error: "Invalid rating." });
+    const ticket = await Ticket.findByIdAndUpdate(
+      req.params.ticketId,
+      { $set: { feedbackRating, feedbackReceivedAt: new Date().toISOString() } },
+      { new: true }
+    );
+    if (!ticket) return res.status(404).json({ error: "Ticket not found." });
+    res.json({ message: "Feedback saved!", feedbackRating });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 /* ══════════════════════════════════
    START SERVER
 ══════════════════════════════════ */
