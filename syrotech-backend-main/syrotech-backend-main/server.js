@@ -12,9 +12,9 @@ const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_A
 const smsOtpStore = {};
 const resend = new Resend(process.env.RESEND_API_KEY);
 const path     = require("path");
-const User   = require("./models/User");
-
-const Ticket = require("./models/Ticket");
+const User            = require("./models/User");
+const Ticket          = require("./models/Ticket");
+const PriorityCompany = require("./models/PriorityCompany");
 
 // ✅ ADD THESE 2 LINES
 
@@ -178,7 +178,7 @@ async function seedSupportPersons() {
     // L4
     { name: "Akhil Sharma L4", email: "akhil.sharma1@goip.in", password: "L4$AKH*shr!m#7", specialization: ["Passive Products"], level: 4, zone: "all", city: "", country: "India", phone: "" },
     // done
-    
+
     //  Lockin ticket   support person name
     { 
       name: "Tejvir Singh", 
@@ -404,6 +404,40 @@ app.get("/api/products", (req, res) => {
 /* ══════════════════════════════════
    GET ALL TICKETS
 ══════════════════════════════════ */
+
+// GET all high priority companies
+app.get("/api/priority-companies", async (req, res) => {
+  try {
+    const list = await PriorityCompany.find();
+    res.json(list);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ADD a high priority company
+app.post("/api/priority-companies", async (req, res) => {
+  try {
+    const { companyName, setBy } = req.body;
+    const exists = await PriorityCompany.findOne({
+      companyName: { $regex: new RegExp(`^${companyName}$`, "i") }
+    });
+    if (!exists) {
+      await PriorityCompany.create({ companyName, setBy: setBy || "Admin" });
+    }
+    res.json({ message: "Added." });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// REMOVE a high priority company
+app.delete("/api/priority-companies/:companyName", async (req, res) => {
+  try {
+    await PriorityCompany.findOneAndDelete({
+      companyName: { $regex: new RegExp(`^${req.params.companyName}$`, "i") }
+    });
+    res.json({ message: "Removed." });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+
 app.get("/tickets", async (req, res) => {
   try {
     const tickets = await Ticket.find().sort({ createdAt: -1 });
@@ -422,6 +456,40 @@ app.post("/tickets", async (req, res) => {
       .select("ticketNumber");
     const nextNumber = last ? last.ticketNumber + 1 : 1;
     const now = new Date().toISOString();
+// Check if company is high priority
+const companyName = req.body.companyName || "";
+let autoAssignTo = req.body.assignTo || "";
+let autoPriority = "low";
+
+if (companyName) {
+  const isHighPriority = await PriorityCompany.findOne({
+    companyName: { $regex: new RegExp(`^${companyName}$`, "i") }
+  });
+
+  if (isHighPriority) {
+    autoPriority = "high";
+    // Find L3 engineer with least open tickets matching category
+    const category = (req.body.category || "").toLowerCase();
+    const allSupport = await User.find({ role: "support", approved: true });
+    const l3Engineers = allSupport.filter(p => {
+      const specs = Array.isArray(p.specialization) ? p.specialization : [];
+      return p.level === 3 && specs.map(s => s.toLowerCase()).includes(category);
+    });
+    if (l3Engineers.length > 0) {
+      const countOpen = async (name) => {
+        return await Ticket.countDocuments({ assignTo: name, status: { $in: ["open", "pending"] } });
+      };
+      let bestL3 = l3Engineers[0];
+      let bestCount = await countOpen(bestL3.name);
+      for (const eng of l3Engineers.slice(1)) {
+        const c = await countOpen(eng.name);
+        if (c < bestCount) { bestCount = c; bestL3 = eng; }
+      }
+      autoAssignTo = bestL3.name;
+    }
+  }
+}
+
 const ticket = await Ticket.create({
   ...req.body,
   ticketNumber: nextNumber,
@@ -430,6 +498,17 @@ const ticket = await Ticket.create({
   firstDescription: req.body.description,
   firstCreatedAt: now,
   firstRaisedByName: req.body.raisedByName,
+  priority: autoPriority,
+  assignTo: autoAssignTo,
+  ...(autoPriority === "high" ? {
+    reassignHistory: [{
+      from: req.body.assignTo || "",
+      to: autoAssignTo,
+      reason: "Auto-escalated: High priority company",
+      timestamp: now,
+      by: "System"
+    }]
+  } : {})
 });
     res.status(201).json({ ...ticket.toObject(), id: ticket._id.toString() });
   } catch (err) { res.status(500).json({ error: err.message }); }

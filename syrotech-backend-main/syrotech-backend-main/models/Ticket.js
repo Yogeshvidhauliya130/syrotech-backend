@@ -95,6 +95,7 @@ reopenedAt:           { type: String, default: null },
   statusUpdates: { type: Array, default: [] },
 latestStatusUpdate: { type: String, default: "" },
   originalDescription:  { type: String, default: "" },
+  priority: { type: String, default: "low" },
   
 
 }, { timestamps: true });
