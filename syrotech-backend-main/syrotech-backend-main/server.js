@@ -178,6 +178,7 @@ async function seedSupportPersons() {
     // L4
     { name: "Akhil Sharma L4", email: "akhil.sharma1@goip.in", password: "L4$AKH*shr!m#7", specialization: ["Passive Products"], level: 4, zone: "all", city: "", country: "India", phone: "" },
     // done
+    
     //  Lockin ticket   support person name
     { 
       name: "Tejvir Singh", 
