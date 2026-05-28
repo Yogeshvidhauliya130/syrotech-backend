@@ -659,14 +659,19 @@ app.post("/api/reset-password", async (req, res) => {
     if (!user.otp || user.otp !== otp || new Date() > new Date(user.otpExpiry))
       return res.status(400).json({ error: "OTP expired or invalid. Please start again." });
 
-    const hashed = await bcrypt.hash(newPassword, 10);
-    await User.findByIdAndUpdate(user._id, {
-      password:  hashed,
-      otp:       null,
-      otpExpiry: null,
-    });
+   const isSameAsOld = await bcrypt.compare(newPassword, user.password);
+if (isSameAsOld) {
+  return res.status(400).json({ error: "New password cannot be the same as your old password." });
+}
 
-    res.json({ message: "Password reset successful! You can now login." });
+const hashed = await bcrypt.hash(newPassword, 10);
+await User.findByIdAndUpdate(user._id, {
+  password:  hashed,
+  otp:       null,
+  otpExpiry: null,
+});
+
+res.json({ message: "Password reset successful! You can now login." });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
