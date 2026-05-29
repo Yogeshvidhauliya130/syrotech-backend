@@ -497,6 +497,8 @@ if (!companyName && req.body.raisedBy) {
   if (raiserUser?.companyName) companyName = raiserUser.companyName;
 }
 
+
+
 const ticket = await Ticket.create({
   ...req.body,
   companyName,
