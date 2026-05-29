@@ -729,12 +729,26 @@ app.post("/api/verify-sms-otp", async (req, res) => {
 /* ══════════════════════════════════
    FEEDBACK ENDPOINTS
 ══════════════════════════════════ */
+/* ══════════════════════════════════
+   FEEDBACK ENDPOINTS
+══════════════════════════════════ */
 app.get("/api/feedback/:ticketId", async (req, res) => {
   try {
+    const { token } = req.query;
     const ticket = await Ticket.findById(req.params.ticketId)
-      .select("customer category ticketNumber feedbackRating");
+      .select("customer category ticketNumber feedbackRating feedbackToken");
     if (!ticket) return res.status(404).json({ error: "Ticket not found." });
-    res.json(ticket);
+
+    // ✅ verify token
+    if (!token || token !== ticket.feedbackToken)
+      return res.status(403).json({ error: "Invalid or expired feedback link." });
+
+    res.json({
+      customer:      ticket.customer,
+      category:      ticket.category,
+      ticketNumber:  ticket.ticketNumber,
+      feedbackRating: ticket.feedbackRating,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -742,26 +756,44 @@ app.get("/api/feedback/:ticketId", async (req, res) => {
 
 app.patch("/api/feedback/:ticketId", async (req, res) => {
   try {
-    const { feedbackRating, customerPhone } = req.body;
+    const { feedbackRating, token } = req.body;
     if (!feedbackRating || feedbackRating < 1 || feedbackRating > 5)
       return res.status(400).json({ error: "Invalid rating." });
 
-    // ✅ verify customer phone matches ticket
     const ticket = await Ticket.findById(req.params.ticketId);
     if (!ticket) return res.status(404).json({ error: "Ticket not found." });
-    if (ticket.feedbackRating) return res.status(400).json({ error: "Feedback already submitted." });
 
-    const cleanSubmitted = (customerPhone || "").replace(/\D/g, "").slice(-10);
-    const cleanTicket    = (ticket.phone   || "").replace(/\D/g, "").slice(-10);
-    if (!cleanSubmitted || cleanSubmitted !== cleanTicket)
-      return res.status(403).json({ error: "Not authorized to give feedback for this ticket." });
+    // ✅ verify token
+    if (!token || token !== ticket.feedbackToken)
+      return res.status(403).json({ error: "Invalid or expired feedback link." });
 
+    // ✅ check already submitted
+    if (ticket.feedbackRating)
+      return res.status(400).json({ error: "Feedback already submitted." });
+
+    // ✅ save feedback and delete token so link cannot be reused
     const updated = await Ticket.findByIdAndUpdate(
       req.params.ticketId,
-      { $set: { feedbackRating, feedbackReceivedAt: new Date().toISOString() } },
+      { $set: { feedbackRating, feedbackReceivedAt: new Date().toISOString(), feedbackToken: "" } },
       { new: true }
     );
     res.json({ message: "Feedback saved!", feedbackRating: updated.feedbackRating });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ══════════════════════════════════
+   GENERATE FEEDBACK TOKEN
+══════════════════════════════════ */
+app.post("/api/feedback/generate-token/:ticketId", async (req, res) => {
+  try {
+    const token = require("crypto").randomBytes(16).toString("hex");
+    await Ticket.findByIdAndUpdate(
+      req.params.ticketId,
+      { $set: { feedbackToken: token } }
+    );
+    res.json({ token });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
