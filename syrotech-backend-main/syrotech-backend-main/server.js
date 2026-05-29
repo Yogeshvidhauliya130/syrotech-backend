@@ -490,8 +490,16 @@ if (companyName) {
   }
 }
 
+// ✅ Auto-fill companyName from user account if not provided
+let companyName = req.body.companyName || "";
+if (!companyName && req.body.raisedBy) {
+  const raiserUser = await User.findOne({ email: req.body.raisedBy.toLowerCase() });
+  if (raiserUser?.companyName) companyName = raiserUser.companyName;
+}
+
 const ticket = await Ticket.create({
   ...req.body,
+  companyName,
   ticketNumber: nextNumber,
   status: req.body.status || "open",
   createdAt: now,
