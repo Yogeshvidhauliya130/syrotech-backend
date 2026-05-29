@@ -542,7 +542,7 @@ if (updateData.status === "reopened" && existing) {
 }
 
 const ticket = await Ticket.findByIdAndUpdate(
-  req.params.id, { $set: updateData }, { new: true }
+  req.params.id, { $set: updateData }, { returnDocument: "after" }
 );
     if (!ticket) return res.status(404).json({ error: "Not found." });
     res.json({ ...ticket.toObject(), id: ticket._id.toString() });
@@ -781,11 +781,11 @@ app.patch("/api/feedback/:ticketId", async (req, res) => {
       return res.status(400).json({ error: "Feedback already submitted." });
 
     // ✅ save feedback and delete token so link cannot be reused
-    const updated = await Ticket.findByIdAndUpdate(
-      req.params.ticketId,
-      { $set: { feedbackRating, feedbackReceivedAt: new Date().toISOString(), feedbackToken: "" } },
-      { new: true }
-    );
+   const updated = await Ticket.findByIdAndUpdate(
+  req.params.ticketId,
+  { $set: { feedbackRating, feedbackReceivedAt: new Date().toISOString(), feedbackToken: "" } },
+  { returnDocument: "after" }
+);
     res.json({ message: "Feedback saved!", feedbackRating: updated.feedbackRating });
   } catch (err) {
     res.status(500).json({ error: err.message });
