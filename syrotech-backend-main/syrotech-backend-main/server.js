@@ -742,20 +742,31 @@ app.get("/api/feedback/:ticketId", async (req, res) => {
 
 app.patch("/api/feedback/:ticketId", async (req, res) => {
   try {
-    const { feedbackRating } = req.body;
+    const { feedbackRating, customerPhone } = req.body;
     if (!feedbackRating || feedbackRating < 1 || feedbackRating > 5)
       return res.status(400).json({ error: "Invalid rating." });
-    const ticket = await Ticket.findByIdAndUpdate(
+
+    // ✅ verify customer phone matches ticket
+    const ticket = await Ticket.findById(req.params.ticketId);
+    if (!ticket) return res.status(404).json({ error: "Ticket not found." });
+    if (ticket.feedbackRating) return res.status(400).json({ error: "Feedback already submitted." });
+
+    const cleanSubmitted = (customerPhone || "").replace(/\D/g, "").slice(-10);
+    const cleanTicket    = (ticket.phone   || "").replace(/\D/g, "").slice(-10);
+    if (!cleanSubmitted || cleanSubmitted !== cleanTicket)
+      return res.status(403).json({ error: "Not authorized to give feedback for this ticket." });
+
+    const updated = await Ticket.findByIdAndUpdate(
       req.params.ticketId,
       { $set: { feedbackRating, feedbackReceivedAt: new Date().toISOString() } },
       { new: true }
     );
-    if (!ticket) return res.status(404).json({ error: "Ticket not found." });
-    res.json({ message: "Feedback saved!", feedbackRating });
+    res.json({ message: "Feedback saved!", feedbackRating: updated.feedbackRating });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+   
 /* ══════════════════════════════════
    START SERVER
 ══════════════════════════════════ */
