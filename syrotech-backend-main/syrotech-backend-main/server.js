@@ -457,7 +457,11 @@ app.post("/tickets", async (req, res) => {
     const nextNumber = last ? last.ticketNumber + 1 : 1;
     const now = new Date().toISOString();
 // Check if company is high priority
-const companyName = req.body.companyName || "";
+let companyName = req.body.companyName || "";
+if (!companyName && req.body.raisedBy) {
+  const raiserUser = await User.findOne({ email: req.body.raisedBy.toLowerCase() });
+  if (raiserUser?.companyName) companyName = raiserUser.companyName;
+}
 let autoAssignTo = req.body.assignTo || "";
 let autoPriority = "low";
 
@@ -490,12 +494,7 @@ if (companyName) {
   }
 }
 
-// ✅ Auto-fill companyName from user account if not provided
-let companyName = req.body.companyName || "";
-if (!companyName && req.body.raisedBy) {
-  const raiserUser = await User.findOne({ email: req.body.raisedBy.toLowerCase() });
-  if (raiserUser?.companyName) companyName = raiserUser.companyName;
-}
+
 
 
 
