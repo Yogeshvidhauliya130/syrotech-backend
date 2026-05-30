@@ -7,8 +7,6 @@ const bcrypt   = require("bcryptjs");
 const jwt      = require("jsonwebtoken");
 const fs       = require("fs");
 const { Resend } = require("resend");
-const twilio = require("twilio");
-const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 const smsOtpStore = {};
 const resend = new Resend(process.env.RESEND_API_KEY);
 const path     = require("path");
@@ -700,10 +698,16 @@ app.post("/api/send-sms-otp", async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     smsOtpStore[phone] = { otp, expiry: Date.now() + 10 * 60 * 1000 };
 
-    await twilioClient.messages.create({
-      body: `Your GO IP Global signup OTP is: ${otp}. Valid for 10 minutes.`,
-      from: process.env.TWILIO_PHONE_NUMBER,
-      to: `+91${phone}`
+    const message = `Dear User, your OTP for mobile number verification on Syrotech Ticketing Portal is ${otp}. OTP is valid for 10 minutes. Please do not share this OTP with anyone. Regards, Syrotech`;
+
+    const url = `http://api.bulksmsgateway.in/sendmessage.php?user=${process.env.BULKSMS_USER}&password=${process.env.BULKSMS_PASSWORD}&mobile=${phone}&message=${encodeURIComponent(message)}&sender=${process.env.BULKSMS_SENDER}&type=3&template_id=${process.env.BULKSMS_TEMPLATE_ID}`;
+
+    await new Promise((resolve, reject) => {
+      require("http").get(url, (resp) => {
+        let data = "";
+        resp.on("data", chunk => data += chunk);
+        resp.on("end", () => { console.log("SMS response:", data); resolve(data); });
+      }).on("error", reject);
     });
 
     res.json({ message: "OTP sent successfully." });
