@@ -171,6 +171,7 @@ async function seedSupportPersons() {
 
     // ═══ PASSIVE PRODUCTS ═══
     { name: "Archana Verma", email: "archna.verma@goip.in", password: "VRM*arc!hna$33", specialization: ["Passive Products"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+    { name: "Yogesh  Vidhauliya", email: "yogesh.vidhauliya@goip.in", password: "1234", specialization: ["Passive Products"], level: 1, zone: "all", city: "", country: "India", phone: "" },
     { name: "Kishan Kumar", email: "kishan.kumar@goip.in", password: "ksh!AN$kmr*88^", specialization: ["Passive Products"], level: 2, zone: "all", city: "", country: "India", phone: "" },
     { name: "Akhil Sharma", email: "akhil.sharma@goip.in", password: "SHR#akh!il$*99k", specialization: ["Passive Products"], level: 3, zone: "all", city: "", country: "India", phone: "" },
     // L4
