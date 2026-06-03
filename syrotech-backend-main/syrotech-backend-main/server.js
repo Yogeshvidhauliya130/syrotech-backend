@@ -109,7 +109,7 @@ mongoose.connect(process.env.MONGO_URI)
 ══════════════════════════════════ */
 async function seedSupportPersons() {
   const count = await User.countDocuments({ role: "support" });
-  if (count >= 35) {
+  if (count >= 999) {
     console.log("⏭️ Seed skipped!");
     return;
   }
