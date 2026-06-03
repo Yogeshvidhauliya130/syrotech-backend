@@ -162,7 +162,7 @@ async function seedSupportPersons() {
 { name: "Rabi Sharma L4", email: "rabi.sharma1@goip.in", password: "rabi@3465", specialization: ["Entrance Product"], level: 4, zone: "all", city: "", country: "India", phone: "" },
 
 // ═══ PASSIVE PRODUCTS ═══
-{ name: "Archana Verma", email: "archna.verma@goip.in", password: "archana123", specialization: ["Passive Products"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Archna Verma", email: "archna.verma@goip.in", password: "archana123", specialization: ["Passive Products"], level: 1, zone: "all", city: "", country: "India", phone: "" },
 { name: "Kishan Kumar", email: "kishan.kumar@goip.in", password: "kishan123", specialization: ["Passive Products"], level: 2, zone: "all", city: "", country: "India", phone: "" },
 { name: "Akhil Sharma", email: "akhil.sharma@goip.in", password: "akhil123", specialization: ["Passive Products"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 // L4
