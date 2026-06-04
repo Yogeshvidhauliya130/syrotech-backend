@@ -460,7 +460,7 @@ if (companyName) {
     });
     if (l3Engineers.length > 0) {
       const countOpen = async (name) => {
-        return await Ticket.countDocuments({ assignTo: name, status: { $in: ["open", "pending"] } });
+        return await Ticket.countDocuments({ assignTo: name });
       };
       let bestL3 = l3Engineers[0];
       let bestCount = await countOpen(bestL3.name);
