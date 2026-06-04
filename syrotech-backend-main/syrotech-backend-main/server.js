@@ -156,7 +156,7 @@ async function seedSupportPersons() {
 { name: "Baidyanath Mishra L4", email: "baidyanath.mishra1@goip.in", password: "baidyanath@2190", specialization: ["Networking Switch", "Grandstream UC", "Grandstream Networking"], level: 4, zone: "all", city: "", country: "India", phone: "" },
 
 // ═══ ENTRANCE PRODUCTS ═══
-{ name: "Run Singh", email: "run.singh@goip.in", password: "run123", specialization: ["Entrance Product"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+// { name: "Run Singh", email: "run.singh@goip.in", password: "run123", specialization: ["Entrance Product"], level: 1, zone: "all", city: "", country: "India", phone: "" },
 { name: "Gagandeep Sodhi", email: "gagandeep.sodhi@goip.in", password: "gagandeep123", specialization: ["Entrance Product"], level: 2, zone: "all", city: "", country: "India", phone: "" },
 { name: "Rabi Sharma", email: "rabi.sharma@goip.in", password: "rabi123", specialization: ["Entrance Product"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 // L4
