@@ -190,6 +190,7 @@ async function seedSupportPersons() {
   await User.findOneAndUpdate(
     { email: p.email },
     { $set: { 
+      name: p.name,
         specialization: p.specialization, 
         city: p.city, 
         country: p.country, 
