@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
 otpExpiry: { type: Date,   default: null },
 level:     { type: Number, default: 0 },      // ← ADD THIS
 zone:      { type: String, default: "all" },  // ← ADD THIS
+isOnLeave: { type: Boolean, default: false }
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);

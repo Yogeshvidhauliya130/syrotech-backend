@@ -371,6 +371,24 @@ app.post("/api/users/update-customer-type", async (req, res) => {
     res.json({ message: "Updated!" });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
+
+//leave update for support person
+
+app.patch("/api/users/:email/leave", async (req, res) => {
+  try {
+    const { isOnLeave } = req.body;
+    const user = await User.findOneAndUpdate(
+      { email: req.params.email.toLowerCase() },
+      { $set: { isOnLeave } },
+      { returnDocument: "after" }
+    );
+    if (!user) return res.status(404).json({ error: "User not found." });
+    res.json({ message: "Updated.", isOnLeave: user.isOnLeave });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.delete("/api/users/:email", async (req, res) => {
   try {
     await User.findOneAndDelete({ email: req.params.email });
@@ -467,7 +485,7 @@ if (companyName) {
     const allSupport = await User.find({ role: "support", approved: true });
     const l3Engineers = allSupport.filter(p => {
       const specs = Array.isArray(p.specialization) ? p.specialization : [];
-      return p.level === 3 && specs.map(s => s.toLowerCase()).includes(category);
+      return p.level === 3 && !p.isOnLeave && specs.map(s => s.toLowerCase()).includes(category);
     });
     if (l3Engineers.length > 0) {
       const countOpen = async (name) => {
