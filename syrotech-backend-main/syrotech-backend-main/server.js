@@ -427,7 +427,10 @@ app.delete("/api/priority-companies/:companyName", async (req, res) => {
 
 app.get("/tickets", async (req, res) => {
   try {
-    const tickets = await Ticket.find().sort({ createdAt: -1 });
+    const tickets = await Ticket.find()
+      .select("-productImage")
+      .sort({ createdAt: -1 })
+      .limit(500);
     res.json(tickets.map(t => ({ ...t.toObject(), id: t._id.toString() })));
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
