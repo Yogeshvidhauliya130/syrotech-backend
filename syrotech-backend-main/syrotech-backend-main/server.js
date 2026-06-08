@@ -445,11 +445,32 @@ app.delete("/api/priority-companies/:companyName", async (req, res) => {
 
 app.get("/tickets", async (req, res) => {
   try {
-    const tickets = await Ticket.find()
+    const page     = parseInt(req.query.page)   || 1;
+    const limit    = parseInt(req.query.limit)  || 500;
+    const skip     = (page - 1) * limit;
+    const status   = req.query.status   || "";
+    const ticketType = req.query.ticketType || "";
+    const source   = req.query.source   || "";
+
+    // Build filter
+    const filter = {};
+    if (status)     filter.status     = status;
+    if (ticketType) filter.ticketType = ticketType;
+    if (source)     filter.source     = source;
+
+    const totalCount = await Ticket.countDocuments(filter);
+    const tickets    = await Ticket.find(filter)
       .select("-productImage")
       .sort({ createdAt: -1 })
-      .limit(500);
-    res.json(tickets.map(t => ({ ...t.toObject(), id: t._id.toString() })));
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      tickets: tickets.map(t => ({ ...t.toObject(), id: t._id.toString() })),
+      totalCount,
+      page,
+      totalPages: Math.ceil(totalCount / limit),
+    });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
