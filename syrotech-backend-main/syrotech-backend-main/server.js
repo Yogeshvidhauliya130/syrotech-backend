@@ -19,9 +19,23 @@ const PriorityCompany = require("./models/PriorityCompany");
 
 
 
-const app        = express();
-const PORT       = process.env.PORT       || 3001;
+const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || "syrotech_secret";
+
+function verifyAdmin(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  if (!authHeader) return res.status(401).json({ error: "Unauthorized." });
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (decoded.role !== "admin") return res.status(403).json({ error: "Admins only." });
+    next();
+  } catch {
+    return res.status(401).json({ error: "Invalid or expired token." });
+  }
+}
+const PORT       = process.env.PORT       || 3001;
+// const JWT_SECRET = process.env.JWT_SECRET || "syrotech_secret";
 
 
 app.use(cors({
@@ -591,11 +605,8 @@ app.delete("/tickets/:id", async (req, res) => {
 /* ══════════════════════════════════
    ✅ BACKUP ENDPOINT
 ══════════════════════════════════ */
-app.get("/api/backup", async (req, res) => {
-  const key = req.query.key;
-  if (key !== "syrotech2025") {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
+app.get("/api/backup", verifyAdmin, async (req, res) => {
+  
   try {
     const tickets = await Ticket.find().lean();
     const users   = await User.find({}, "-password").lean();
