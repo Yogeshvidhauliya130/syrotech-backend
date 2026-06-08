@@ -19,13 +19,17 @@ const PriorityCompany = require("./models/PriorityCompany");
 const rateLimit = require("express-rate-limit");
 
 const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5,                    // only 5 attempts allowed
-  keyGenerator: (req) => (req.body.email || req.ip).toLowerCase(),
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  keyGenerator: (req) => {
+    const email = req.body.email || "";
+    return email ? email.toLowerCase() : req.ip;
+  },
+  validate: { xForwardedForHeader: false },
   handler: (req, res) => {
     res.status(429).json({ error: "Too many failed attempts. Please try again after 15 minutes." });
   },
-  skipSuccessfulRequests: true, // only counts FAILED attempts
+  skipSuccessfulRequests: true,
 });
 
 // ✅ ADD THESE 2 LINES
