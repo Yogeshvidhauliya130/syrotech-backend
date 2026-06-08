@@ -14,6 +14,20 @@ const User            = require("./models/User");
 const Ticket          = require("./models/Ticket");
 const PriorityCompany = require("./models/PriorityCompany");
 
+
+
+const rateLimit = require("express-rate-limit");
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5,                    // only 5 attempts allowed
+  keyGenerator: (req) => (req.body.email || req.ip).toLowerCase(),
+  handler: (req, res) => {
+    res.status(429).json({ error: "Too many failed attempts. Please try again after 15 minutes." });
+  },
+  skipSuccessfulRequests: true, // only counts FAILED attempts
+});
+
 // ✅ ADD THESE 2 LINES
 
 
@@ -279,7 +293,7 @@ zone: zone || "all",
 /* ══════════════════════════════════
    LOGIN
 ══════════════════════════════════ */
-app.post("/api/login", async (req, res) => {
+app.post("/api/login", loginLimiter, async (req, res) => {
   try {
     const { email, password, role } = req.body;
     if (role === "admin") {
