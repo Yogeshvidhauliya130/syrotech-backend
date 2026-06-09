@@ -158,6 +158,8 @@ async function seedSupportPersons() {
 // L4
 { name: "Nitesh Kumar Yadav L4", email: "nitesh.kumar1@syrotech.com", password: "nitesh@2002", specialization: ["OLT","ONT"], level: 4, zone: "all", city: "", country: "India", phone: "" },
 
+{ name: "Naman Gupta  L4", email: "naman.gupta@goip.in", password: "naman@1234", specialization: ["OLT","ONT"], level: 4, zone: "all", city: "", country: "India", phone: "" },
+
 // ═══ ONT ═══
 { name: "Harish Bind", email: "harish.bind@syrotech.com", password: "harish123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
 { name: "Anuj Kumar", email: "anuj.kumar@syrotech.com", password: "anuj123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
