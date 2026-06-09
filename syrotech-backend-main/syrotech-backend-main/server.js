@@ -209,6 +209,12 @@ async function seedSupportPersons() {
 
 // Lockin ticket support person name
 { name: "Tejvir Singh", email: "tejvir.singh@goip.in", password: "tejvir@1111", specialization: ["Lockin ONT", "Lockin OLT"], level: 3, zone: "all", city: "", country: "India", phone: "" },
+
+
+// production support 
+{ name: "Nishant Gupta", email: "nishant.gupta@goip.in", password: "nishant@1111", specialization: ["Production"], level: 3, zone: "all", city: "", country: "India", phone: "" },
+
+
 ];
  
 
