@@ -534,6 +534,40 @@ if (!companyName && req.body.raisedBy) {
 let autoAssignTo = req.body.assignTo || "";
 let autoPriority = "low";
 
+// ✅ Backend fallback auto-assign
+if (!autoAssignTo && req.body.category) {
+  const allSupport = await User.find({ role: "support", approved: true });
+  const category = (req.body.category || "").toLowerCase();
+  const state = (req.body.state || "").toLowerCase();
+  const isSouth = ["kerala", "tamil nadu", "karnataka", "andhra pradesh", "telangana"].includes(state);
+
+  for (let level = 1; level <= 4; level++) {
+    let matched = allSupport.filter(p => {
+      const specs = Array.isArray(p.specialization) ? p.specialization : [];
+      return p.level === level && !p.isOnLeave && specs.map(s => s.toLowerCase()).includes(category);
+    });
+
+    if (isSouth) {
+      const southOnly = matched.filter(p => p.zone === "South Region");
+      const allZone   = matched.filter(p => p.zone === "all");
+      matched = southOnly.length > 0 ? southOnly : allZone;
+    } else {
+      matched = matched.filter(p => p.zone === "all" || p.zone === "all except south");
+    }
+
+    if (matched.length > 0) {
+      let best = matched[0];
+      let bestCount = await Ticket.countDocuments({ assignTo: best.name });
+      for (const eng of matched.slice(1)) {
+        const c = await Ticket.countDocuments({ assignTo: eng.name });
+        if (c < bestCount) { bestCount = c; best = eng; }
+      }
+      autoAssignTo = best.name;
+      break;
+    }
+  }
+}
+
 if (companyName) {
   const isHighPriority = await PriorityCompany.findOne({
     companyName: { $regex: new RegExp(`^${companyName}$`, "i") }
