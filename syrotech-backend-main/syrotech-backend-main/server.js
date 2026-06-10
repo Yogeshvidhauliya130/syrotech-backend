@@ -520,10 +520,15 @@ app.get("/tickets", async (req, res) => {
 app.post("/tickets", async (req, res) => {
   try {
     // ✅ Assign permanent global ticket number
-    const last = await Ticket.findOne({ ticketNumber: { $exists: true } })
-      .sort({ ticketNumber: -1 })
-      .select("ticketNumber");
-    const nextNumber = last ? last.ticketNumber + 1 : 1;
+   let nextNumber;
+while (true) {
+  const last = await Ticket.findOne({ ticketNumber: { $exists: true } })
+    .sort({ ticketNumber: -1 })
+    .select("ticketNumber");
+  nextNumber = last ? last.ticketNumber + 1 : 1;
+  const exists = await Ticket.findOne({ ticketNumber: nextNumber });
+  if (!exists) break;
+}
     const now = new Date().toISOString();
 // Check if company is high priority
 let companyName = req.body.companyName || "";
