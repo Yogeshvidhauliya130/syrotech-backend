@@ -46,7 +46,8 @@ raisedVia:    { type: String, default: "call" },
   reassignHistory: { type: Array,  default: [] },
 
   // Product Image (base64)
-  productImage: { type: String, default: "" },
+productImage:  { type: String, default: "" },
+  productImages: { type: Array,  default: [] },
 
   // RMA fields
   rmaStatus:        { type: Boolean, default: false },
