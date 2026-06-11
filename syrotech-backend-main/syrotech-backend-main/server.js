@@ -16,14 +16,14 @@ const PriorityCompany = require("./models/PriorityCompany");
 
 
 
-const rateLimit = require("express-rate-limit");
+const { rateLimit, ipKeyGenerator } = require("express-rate-limit");
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 5,
   keyGenerator: (req) => {
     const email = req.body.email || "";
-    return email ? email.toLowerCase() : req.ip;
+   return email ? email.toLowerCase() : ipKeyGenerator(req.ip);
   },
   validate: { xForwardedForHeader: false },
   handler: (req, res) => {
@@ -140,11 +140,11 @@ mongoose.connect(process.env.MONGO_URI)
    ✅ UPDATED WITH REAL TEAM LIST
 ══════════════════════════════════ */
 async function seedSupportPersons() {
-  const count = await User.countDocuments({ role: "support" });
-  if (count >= 999) {
-    console.log("⏭️ Seed skipped!");
-    return;
-  }
+ const already = await User.findOne({ email: "__seed_done__" });
+if (already) {
+  console.log("⏭️ Seed skipped!");
+  return;
+}
    const list = [
     // ═══ OLT ═══
    { name: "Ankush Pal", email: "ankush.pal@syrotech.com", password: "ankush123", specialization: ["OLT"], level: 1, zone: "all", city: "", country: "India", phone: "" },
@@ -244,6 +244,9 @@ async function seedSupportPersons() {
   console.log("✅ Updated:", p.name, "level:", p.level, "zone:", p.zone);
 }
   }
+    // ✅ ADD THIS
+  await User.create({ email: "__seed_done__", name: "seed", role: "system", password: "x", approved: false });
+  console.log("✅ Seed complete!");
 }
 
 /* ══════════════════════════════════
