@@ -502,6 +502,13 @@ app.get("/tickets", async (req, res) => {
     if (source)     filter.source     = source;
 
     const totalCount = await Ticket.countDocuments(filter);
+
+    // ✅ NEW: status counts (cheap — counts only, no images loaded)
+    const openCount     = await Ticket.countDocuments({ ...filter, status: "open" });
+    const resolvedCount = await Ticket.countDocuments({ ...filter, status: "resolved" });
+    const rmaCount      = await Ticket.countDocuments({ ...filter, status: "rma" });
+    const reopenedCount = await Ticket.countDocuments({ ...filter, status: "reopened" });
+
     const tickets    = await Ticket.find(filter)
       .select("-productImage")
       .sort({ createdAt: -1 })
@@ -511,6 +518,10 @@ app.get("/tickets", async (req, res) => {
     res.json({
       tickets: tickets.map(t => ({ ...t.toObject(), id: t._id.toString() })),
       totalCount,
+      openCount,
+      resolvedCount,
+      rmaCount,
+      reopenedCount,
       page,
       totalPages: Math.ceil(totalCount / limit),
     });

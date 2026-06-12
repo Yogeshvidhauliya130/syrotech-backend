@@ -106,5 +106,11 @@ latestStatusUpdate: { type: String, default: "" },
 
 }, { timestamps: true });
 
+// ✅ Indexes to make pagination + counts fast
+ticketSchema.index({ createdAt: -1 });
+ticketSchema.index({ status: 1 });
+ticketSchema.index({ assignTo: 1 });
+ticketSchema.index({ raisedBy: 1 });
+
 module.exports = mongoose.model("Ticket", ticketSchema);
 
