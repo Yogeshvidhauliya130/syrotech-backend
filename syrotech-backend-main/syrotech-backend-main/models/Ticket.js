@@ -4,6 +4,7 @@ const ticketSchema = new mongoose.Schema({
   category:     { type: String, default: "" },
   subCategory:  { type: String, default: "" },
   serialNo:     { type: String, default: "" },
+  modelNo: { type: String, default: "" },
   mac:          { type: String, default: "" },
   model:        { type: String, default: "" }, 
   customer:     { type: String, default: "" },
