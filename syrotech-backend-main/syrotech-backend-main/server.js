@@ -511,6 +511,10 @@ app.get("/tickets", async (req, res) => {
     if (raisedBy)   filter.raisedBy   = raisedBy.toLowerCase();
     if (assignTo)   filter.assignTo   = assignTo;
 
+    // ✅ search by ticket number (exact match, searches whole database)
+    const ticketNumber = req.query.ticketNumber || "";
+    if (ticketNumber) filter.ticketNumber = parseInt(ticketNumber);
+
     // ✅ "mine" — match tickets connected to one support person (assigned OR raised OR reassigned-from OR resolved-by)
     const mineName  = req.query.mineName  || "";
     const mineEmail = req.query.mineEmail || "";
