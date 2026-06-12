@@ -511,6 +511,17 @@ app.get("/tickets", async (req, res) => {
     if (raisedBy)   filter.raisedBy   = raisedBy.toLowerCase();
     if (assignTo)   filter.assignTo   = assignTo;
 
+    // ✅ "mine" — match tickets connected to one support person (assigned OR raised OR reassigned-from OR resolved-by)
+    const mineName  = req.query.mineName  || "";
+    const mineEmail = req.query.mineEmail || "";
+    if (mineName || mineEmail) {
+      filter.$or = [];
+      if (mineName)  filter.$or.push({ assignTo: mineName });
+      if (mineName)  filter.$or.push({ reassignedFrom: mineName });
+      if (mineName)  filter.$or.push({ resolvedBy: mineName });
+      if (mineEmail) filter.$or.push({ raisedBy: mineEmail.toLowerCase() });
+    }
+
     const totalCount = await Ticket.countDocuments(filter);
 
     // ✅ NEW: status counts (cheap — counts only, no images loaded)
