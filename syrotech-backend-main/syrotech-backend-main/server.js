@@ -525,7 +525,145 @@ app.get("/tickets", async (req, res) => {
       page,
       totalPages: Math.ceil(totalCount / limit),
     });
-  } catch (err) { res.status(500).json({ error: err.message }); }
+ } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+/* ══════════════════════════════════
+   ✅ PERFORMANCE STATS (backend aggregation — scales past 2000)
+   Returns per-agent summary numbers only, no ticket rows.
+══════════════════════════════════ */
+app.get("/api/stats/performance", async (req, res) => {
+  try {
+    // Optional date filtering (matches frontend filters)
+    const { fromDate, toDate, source, raisedVia } = req.query;
+
+    const match = {};
+    if (source)    match.source    = source;
+    if (raisedVia) match.raisedVia = raisedVia;
+
+    // Date range filter on createdAt/date — done in JS-safe way via $expr
+    const dateMatch = {};
+    if (fromDate || toDate) {
+      // createdAt is stored as ISO string; compare as strings works for ISO format
+      if (fromDate) dateMatch.$gte = new Date(fromDate).toISOString();
+      if (toDate) {
+        const end = new Date(toDate);
+        end.setHours(23, 59, 59, 999);
+        dateMatch.$lte = end.toISOString();
+      }
+    }
+    if (Object.keys(dateMatch).length) match.createdAt = dateMatch;
+
+    const DAY_MS = 24 * 60 * 60 * 1000;
+
+    const agg = await Ticket.aggregate([
+      { $match: match },
+      {
+        $addFields: {
+          _resolveMs: {
+            $cond: [
+              { $and: [{ $ne: ["$createdAt", null] }, { $ne: ["$resolvedAt", null] }] },
+              { $subtract: [{ $toDate: "$resolvedAt" }, { $toDate: "$createdAt" }] },
+              null
+            ]
+          }
+        }
+      },
+      {
+        $group: {
+          _id: "$assignTo",
+          total:    { $sum: 1 },
+          open:     { $sum: { $cond: [{ $eq: ["$status", "open"] }, 1, 0] } },
+          resolved: { $sum: { $cond: [{ $eq: ["$status", "resolved"] }, 1, 0] } },
+          rma:      { $sum: { $cond: [{ $eq: ["$status", "rma"] }, 1, 0] } },
+          reopened: { $sum: { $cond: [{ $eq: [{ $toLower: "$status" }, "reopened"] }, 1, 0] } },
+          // resolved tickets with valid times
+          resolvedWithTime: {
+            $sum: { $cond: [{ $and: [{ $eq: ["$status", "resolved"] }, { $ne: ["$_resolveMs", null] }] }, 1, 0] }
+          },
+          within24: {
+            $sum: { $cond: [
+              { $and: [
+                { $eq: ["$status", "resolved"] },
+                { $ne: ["$_resolveMs", null] },
+                { $lte: ["$_resolveMs", DAY_MS] }
+              ] }, 1, 0 ] }
+          },
+          totalResolveMs: {
+            $sum: { $cond: [{ $and: [{ $eq: ["$status", "resolved"] }, { $ne: ["$_resolveMs", null] }] }, "$_resolveMs", 0] }
+          },
+          ratingSum:   { $sum: { $cond: [{ $gt: ["$feedbackRating", 0] }, "$feedbackRating", 0] } },
+          ratingCount: { $sum: { $cond: [{ $gt: ["$feedbackRating", 0] }, 1, 0] } },
+        }
+      }
+    ]);
+
+    // Reassigned counts (by reassignedFrom)
+    const reassignedAgg = await Ticket.aggregate([
+      { $match: { reassignedFrom: { $ne: "" } } },
+      { $group: { _id: "$reassignedFrom", count: { $sum: 1 } } }
+    ]);
+    const reassignedMap = {};
+    reassignedAgg.forEach(r => { if (r._id) reassignedMap[r._id.toLowerCase().trim()] = r.count; });
+
+    const agents = agg
+      .filter(a => a._id)  // skip empty assignTo
+      .map(a => {
+        const avgHours = a.resolvedWithTime
+          ? (a.totalResolveMs / a.resolvedWithTime / (1000 * 60 * 60)).toFixed(1)
+          : null;
+        const avgFeedback = a.ratingCount ? (a.ratingSum / a.ratingCount).toFixed(1) : null;
+        return {
+          name: a._id,
+          total: a.total,
+          open: a.open,
+          resolved: a.resolved,
+          rma: a.rma,
+          reopened: a.reopened,
+          within24: a.within24,
+          avgHours,
+          avgFeedback,
+          feedbackCount: a.ratingCount,
+          reassigned: reassignedMap[a._id.toLowerCase().trim()] || 0,
+          compliance: a.resolvedWithTime ? Math.round((a.within24 / a.resolvedWithTime) * 100) : 0,
+        };
+      })
+      .sort((a, b) => b.total - a.total);
+
+    res.json({ agents });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ══════════════════════════════════
+   ✅ PERFORMANCE EXPORT (full rows for ONE agent — for Excel/PDF)
+   Loaded only when admin clicks export, one agent at a time.
+══════════════════════════════════ */
+app.get("/api/stats/performance/agent-tickets", async (req, res) => {
+  try {
+    const { agent, fromDate, toDate } = req.query;
+    if (!agent) return res.status(400).json({ error: "agent required" });
+
+    const match = { assignTo: agent };
+    const dateMatch = {};
+    if (fromDate) dateMatch.$gte = new Date(fromDate).toISOString();
+    if (toDate) {
+      const end = new Date(toDate);
+      end.setHours(23, 59, 59, 999);
+      dateMatch.$lte = end.toISOString();
+    }
+    if (Object.keys(dateMatch).length) match.createdAt = dateMatch;
+
+    const tickets = await Ticket.find(match)
+      .select("-productImage -productImages")  // exclude images, keep everything else
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.json({ tickets: tickets.map(t => ({ ...t, id: t._id.toString() })) });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 /* ══════════════════════════════════
