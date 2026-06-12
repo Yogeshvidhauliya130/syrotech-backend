@@ -491,15 +491,19 @@ app.get("/tickets", async (req, res) => {
     const page     = parseInt(req.query.page)   || 1;
     const limit    = parseInt(req.query.limit)  || 500;
     const skip     = (page - 1) * limit;
-    const status   = req.query.status   || "";
+   const status   = req.query.status   || "";
     const ticketType = req.query.ticketType || "";
     const source   = req.query.source   || "";
+    const raisedBy = req.query.raisedBy || "";
+    const assignTo = req.query.assignTo || "";
 
     // Build filter
     const filter = {};
     if (status)     filter.status     = status;
     if (ticketType) filter.ticketType = ticketType;
     if (source)     filter.source     = source;
+    if (raisedBy)   filter.raisedBy   = raisedBy.toLowerCase();
+    if (assignTo)   filter.assignTo   = assignTo;
 
     const totalCount = await Ticket.countDocuments(filter);
 
