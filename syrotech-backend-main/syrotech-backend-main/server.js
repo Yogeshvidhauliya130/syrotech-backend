@@ -512,7 +512,7 @@ app.get("/tickets", async (req, res) => {
     if (raisedBy)   filter.raisedBy   = raisedBy.toLowerCase();
     if (assignTo)   filter.assignTo   = assignTo;
 
-    // ✅ search by ticket number (exact match, searches whole database)
+    // ✅ search by ticket number (exact match)
     const ticketNumber = req.query.ticketNumber || "";
     if (ticketNumber) filter.ticketNumber = parseInt(ticketNumber);
 
@@ -522,14 +522,23 @@ app.get("/tickets", async (req, res) => {
     }
 
     // ✅ "mine" — match tickets connected to one support person (assigned OR raised OR reassigned-from OR resolved-by)
+    // Works together with ticketNumber: a searched ticket only returns if it is ALSO mine.
     const mineName  = req.query.mineName  || "";
     const mineEmail = req.query.mineEmail || "";
     if (mineName || mineEmail) {
-      filter.$or = [];
-      if (mineName)  filter.$or.push({ assignTo: mineName });
-      if (mineName)  filter.$or.push({ reassignedFrom: mineName });
-      if (mineName)  filter.$or.push({ resolvedBy: mineName });
-      if (mineEmail) filter.$or.push({ raisedBy: mineEmail.toLowerCase() });
+      const mineOr = [];
+      if (mineName)  mineOr.push({ assignTo: mineName });
+      if (mineName)  mineOr.push({ reassignedFrom: mineName });
+      if (mineName)  mineOr.push({ resolvedBy: mineName });
+      if (mineEmail) mineOr.push({ raisedBy: mineEmail.toLowerCase() });
+      filter.$or = mineOr;
+    }
+
+    // ✅ "raised by me only" — used by My Raised tab (raisedBy AND source=support)
+    const mineRaisedEmail = req.query.mineRaisedEmail || "";
+    if (mineRaisedEmail) {
+      filter.raisedBy = mineRaisedEmail.toLowerCase();
+      filter.source   = "support";
     }
 
     const totalCount = await Ticket.countDocuments(filter);
