@@ -140,11 +140,11 @@ mongoose.connect(process.env.MONGO_URI)
    ✅ UPDATED WITH REAL TEAM LIST
 ══════════════════════════════════ */
 async function seedSupportPersons() {
- const already = await User.findOne({ email: "__seed_done__" });
-if (already) {
-  console.log("⏭️ Seed skipped!");
-  return;
-}
+//  const already = await User.findOne({ email: "__seed_done__" });
+// if (already) {
+//   console.log("⏭️ Seed skipped!");
+//   return;
+// }
    const list = [
     // ═══ OLT ═══
    { name: "Ankush Pal", email: "ankush.pal@syrotech.com", password: "ankush123", specialization: ["OLT"], level: 1, zone: "all", city: "", country: "India", phone: "" },
@@ -158,7 +158,7 @@ if (already) {
 // L4
 { name: "Nitesh Kumar Yadav L4", email: "nitesh.kumar1@syrotech.com", password: "nitesh@2002", specialization: ["OLT","ONT"], level: 4, zone: "all", city: "", country: "India", phone: "" },
 
-{ name: "Naman Gupta  L4", email: "naman.gupta@goip.in", password: "naman@1234", specialization: ["OLT","ONT"], level: 4, zone: "all", city: "", country: "India", phone: "" },
+
 
 // ═══ ONT ═══
 { name: "Harish Bind", email: "harish.bind@syrotech.com", password: "harish123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
@@ -212,7 +212,7 @@ if (already) {
 // Lockin ticket support person name
 { name: "Tejvir Singh", email: "tejvir.singh@goip.in", password: "tejvir@1111", specialization: ["Lockin ONT", "Lockin OLT"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 
-{ name: "Naman  Gupta", email: "naman.gupta1@goip.in", password: "naman@1112", specialization: ["Lockin ONT", "Lockin OLT"], level: 3, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Naman  Gupta", email: "naman.gupta@goip.in", password: "naman@1112", specialization: ["Lockin ONT", "Lockin OLT"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 
 // production support 
 { name: "Nishant Gupta", email: "nishant.gupta@goip.in", password: "nishant@1111", specialization: ["Production"], level: 3, zone: "all", city: "", country: "India", phone: "" },
