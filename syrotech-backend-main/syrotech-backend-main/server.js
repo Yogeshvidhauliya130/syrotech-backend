@@ -515,6 +515,11 @@ app.get("/tickets", async (req, res) => {
     const ticketNumber = req.query.ticketNumber || "";
     if (ticketNumber) filter.ticketNumber = parseInt(ticketNumber);
 
+    // ✅ only reassigned tickets (reassignedFrom is not empty)
+    if (req.query.reassigned === "true") {
+      filter.reassignedFrom = { $nin: ["", null] };
+    }
+
     // ✅ "mine" — match tickets connected to one support person (assigned OR raised OR reassigned-from OR resolved-by)
     const mineName  = req.query.mineName  || "";
     const mineEmail = req.query.mineEmail || "";
