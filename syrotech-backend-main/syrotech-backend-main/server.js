@@ -140,11 +140,11 @@ mongoose.connect(process.env.MONGO_URI)
    ✅ UPDATED WITH REAL TEAM LIST
 ══════════════════════════════════ */
 async function seedSupportPersons() {
-//  const already = await User.findOne({ email: "__seed_done__" });
-// if (already) {
-//   console.log("⏭️ Seed skipped!");
-//   return;
-// }
+ const already = await User.findOne({ email: "__seed_done__" });
+if (already) {
+  console.log("⏭️ Seed skipped!");
+  return;
+}
    const list = [
     // ═══ OLT ═══
    { name: "Ankush Pal", email: "ankush.pal@syrotech.com", password: "ankush123", specialization: ["OLT"], level: 1, zone: "all", city: "", country: "India", phone: "" },
