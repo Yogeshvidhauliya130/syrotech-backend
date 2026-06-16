@@ -733,13 +733,26 @@ let autoAssignTo = req.body.assignTo || "";
 let autoPriority = "low";
 
 // ✅ Backend fallback auto-assign
+// ✅ Backend fallback auto-assign
 if (!autoAssignTo && req.body.category) {
   const allSupport = await User.find({ role: "support", approved: true });
   const category = (req.body.category || "").toLowerCase();
+
+  // ✅ LOCKIN ONLY: if a lockin engineer raised it, assign to themselves
+  if (req.body.ticketType === "lockin" && req.body.raisedBy) {
+    const raiser = allSupport.find(p => {
+      const specs = Array.isArray(p.specialization) ? p.specialization : [];
+      return p.email.toLowerCase() === req.body.raisedBy.toLowerCase()
+        && specs.map(s => s.toLowerCase()).includes(category);
+    });
+    if (raiser) {
+      autoAssignTo = raiser.name;
+    }
+  }
   const state = (req.body.state || "").toLowerCase();
   const isSouth = ["kerala", "tamil nadu", "karnataka", "andhra pradesh", "telangana"].includes(state);
 
-  for (let level = 1; level <= 4; level++) {
+  for (let level = 1; level <= 4 && !autoAssignTo; level++) {
     let matched = allSupport.filter(p => {
       const specs = Array.isArray(p.specialization) ? p.specialization : [];
       return p.level === level && !p.isOnLeave && specs.map(s => s.toLowerCase()).includes(category);
