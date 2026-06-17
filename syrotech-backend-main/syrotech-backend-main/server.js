@@ -147,33 +147,33 @@ async function seedSupportPersons() {
 // }
    const list = [
     // ═══ OLT ═══
-   { name: "Ankush Pal", email: "ankush.pal@syrotech.com", password: "ankush123", specialization: ["OLT"], level: 1, zone: "all", city: "", country: "India", phone: "" },
-{ name: "Shailendra Singh", email: "shailendra.singh@syrotech.com", password: "shailendra123", specialization: ["OLT"], level: 1, zone: "all", city: "", country: "India", phone: "" },
-{ name: "Yogesh Kumar", email: "yogesh.kumar@goip.in", password: "yogesh123", specialization: ["OLT"], level: 1, zone: "all", city: "", country: "India", phone: "" },
-{ name: "Udit Pathak", email: "udit.pathak@syrotech.com", password: "udit123", specialization: ["OLT"], level: 1, zone: "all", city: "", country: "India", phone: "" },
-{ name: "Arjun Kumar", email:"arjun.kumar@syrotech.com", password: "arjun123", specialization: ["OLT"], level: 1, zone: "all", city: "", country: "India", phone: "" },
-{ name: "Harish Singh Bisht",email:"harish.bisht@syrotech.com", password: "harish123", specialization: ["OLT","ONT"], level: 2, zone: "all", city: "", country: "India", phone: "" },
-{ name: "Gurupreet Singh", email: "gurupreet.singh@syrotech.com", password: "gurupreet123", specialization: ["OLT"], level: 2, zone: "all", city: "", country: "India", phone: "" },
-{ name: "Nitesh Kumar Yadav", email: "nitesh.kumar@syrotech.com", password: "nitesh123", specialization: ["OLT","ONT"], level: 3, zone: "all", city: "", country: "India", phone: "" },
+   { name: "Ankush Pal", email: "ankush.pal@syrotech.com", password: "ankush123", specialization: ["OLT","EMS/NMS"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Shailendra Singh", email: "shailendra.singh@syrotech.com", password: "shailendra123", specialization: ["OLT","EMS/NMS"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Yogesh Kumar", email: "yogesh.kumar@goip.in", password: "yogesh123", specialization: ["OLT","EMS/NMS"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Udit Pathak", email: "udit.pathak@syrotech.com", password: "udit123", specialization: ["OLT","EMS/NMS"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Arjun Kumar", email:"arjun.kumar@syrotech.com", password: "arjun123", specialization: ["OLT","EMS/NMS"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Harish Singh Bisht",email:"harish.bisht@syrotech.com", password: "harish123", specialization: ["OLT","ONT","EMS/NMS"], level: 2, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Gurupreet Singh", email: "gurupreet.singh@syrotech.com", password: "gurupreet123", specialization: ["OLT","EMS/NMS"], level: 2, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Nitesh Kumar Yadav", email: "nitesh.kumar@syrotech.com", password: "nitesh123", specialization: ["OLT","ONT","EMS/NMS"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 // L4
-{ name: "Nitesh Kumar Yadav L4", email: "nitesh.kumar1@syrotech.com", password: "nitesh@2002", specialization: ["OLT","ONT"], level: 4, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Nitesh Kumar Yadav L4", email: "nitesh.kumar1@syrotech.com", password: "nitesh@2002", specialization: ["OLT","ONT","EMS/NMS"], level: 4, zone: "all", city: "", country: "India", phone: "" },
 
 
 
 // ═══ ONT ═══
-{ name: "Harish Bind", email: "harish.bind@syrotech.com", password: "harish123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
-{ name: "Anuj Kumar", email: "anuj.kumar@syrotech.com", password: "anuj123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
-{ name: "Ayush Sharma", email: "ayush.sharma@syrotech.com", password: "ayush123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
-{ name: "Manish Kumar Singh", email: "manish.singh@syrotech.com", password: "manish123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
-{ name: "Kanhaiya Kumar", email: "kanhaiya.kumar@syrotech.com", password: "kanhaiya123", specialization: ["ONT", "Networking Switch", "Grandstream UC", "Grandstream Networking","Wireless Access Point"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
-{ name: "Amit Kumar das", email: "amit.das@syrotech.com", password: "amit123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+{ name: "Harish Bind", email: "harish.bind@syrotech.com", password: "harish123", specialization: ["ONT","EMS/NMS"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+{ name: "Anuj Kumar", email: "anuj.kumar@syrotech.com", password: "anuj123", specialization: ["ONT","EMS/NMS"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+{ name: "Ayush Sharma", email: "ayush.sharma@syrotech.com", password: "ayush123", specialization: ["ONT","EMS/NMS"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+{ name: "Manish Kumar Singh", email: "manish.singh@syrotech.com", password: "manish123", specialization: ["ONT","EMS/NMS"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+{ name: "Kanhaiya Kumar", email: "kanhaiya.kumar@syrotech.com", password: "kanhaiya123", specialization: ["ONT", "Networking Switch", "Grandstream UC", "Grandstream Networking","Wireless Access Point","EMS/NMS"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+{ name: "Amit Kumar das", email: "amit.das@syrotech.com", password: "amit123", specialization: ["ONT","EMS/NMS"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
 // { name: "Debashish Halder", email: "debashis.halder@syrotech.com", password: "debashish123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
-{ name: "Biju Nayak", email: "biju.nayak@syrotech.com", password: "biju123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
-{ name: "Adarsh Kumar", email: "adarsh.k@syrotech.com", password: "adarsh123", specialization: ["ONT"], level: 1, zone: "South Region", city: "", country: "India", phone: "" },
-{ name: "S.K.Seenivasan", email: "seenivasan.sk@goip.in", password: "seenivasan123", specialization: ["ONT","Networking Switch", "Grandstream UC", "Grandstream Networking"], level: 1, zone: "South Region", city: "", country: "India", phone: "" },
-{ name: "Umesh Bari", email: "umesh.bari@syrotech.com", password: "umesh123", specialization: ["ONT"], level: 2, zone: "all except south", city: "", country: "India", phone: "" },
-// { name: "Vivek Kumar", email: "vivek.pawar@syrotech.com", password: "vivek123", specialization: ["ONT"], level: 2, zone: "all except south", city: "", country: "India", phone: "" },
-{ name: "Shekhar Rana", email: "shekhar.rana@syrotech.com", password: "shekhar123", specialization: ["ONT"], level: 2, zone: "all except south", city: "", country: "India", phone: "" },
+{ name: "Biju Nayak", email: "biju.nayak@syrotech.com", password: "biju123", specialization: ["ONT","EMS/NMS"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+{ name: "Adarsh Kumar", email: "adarsh.k@syrotech.com", password: "adarsh123", specialization: ["ONT","EMS/NMS"], level: 1, zone: "South Region", city: "", country: "India", phone: "" },
+{ name: "S.K.Seenivasan", email: "seenivasan.sk@goip.in", password: "seenivasan123", specialization: ["ONT","Networking Switch", "Grandstream UC", "Grandstream Networking","EMS/NMS"], level: 1, zone: "South Region", city: "", country: "India", phone: "" },
+{ name: "Umesh Bari", email: "umesh.bari@syrotech.com", password: "umesh123", specialization: ["ONT","EMS/NMS"], level: 2, zone: "all except south", city: "", country: "India", phone: "" },
+// { name: "Vivek Kumar", email: "vivek.pawar@syrotech.com", password: "vivek123", specialization: ["ONT","EMS/NMS"], level: 2, zone: "all except south", city: "", country: "India", phone: "" },
+{ name: "Shekhar Rana", email: "shekhar.rana@syrotech.com", password: "shekhar123", specialization: ["ONT","EMS/NMS"], level: 2, zone: "all except south", city: "", country: "India", phone: "" },
 
 // ═══ SFP & MEDIA CONVERTER ═══
 // { name: "RamTirth Bhargav", email: "ramtirth.bhargav@syrotech.com", password: "ramtirth123", specialization: ["Media Converter", "Optical Transceivers"], level: 1, zone: "all", city: "", country: "India", phone: "" },
