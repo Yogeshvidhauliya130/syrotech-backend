@@ -165,7 +165,7 @@ if (already) {
 { name: "Anuj Kumar", email: "anuj.kumar@syrotech.com", password: "anuj123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
 { name: "Ayush Sharma", email: "ayush.sharma@syrotech.com", password: "ayush123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
 { name: "Manish Kumar Singh", email: "manish.singh@syrotech.com", password: "manish123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
-{ name: "Kanhaiya Kumar", email: "kanhaiya.kumar@syrotech.com", password: "kanhaiya123", specialization: ["ONT", "Networking Switch", "Grandstream UC", "Grandstream Networking"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+{ name: "Kanhaiya Kumar", email: "kanhaiya.kumar@syrotech.com", password: "kanhaiya123", specialization: ["ONT", "Networking Switch", "Grandstream UC", "Grandstream Networking","Wireless Access Point"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
 { name: "Amit Kumar das", email: "amit.das@syrotech.com", password: "amit123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
 // { name: "Debashish Halder", email: "debashis.halder@syrotech.com", password: "debashish123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
 { name: "Biju Nayak", email: "biju.nayak@syrotech.com", password: "biju123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
@@ -184,8 +184,8 @@ if (already) {
 { name: "Mohit Mittal L4", email: "mohit.mittal1@goip.in", password: "mohit@0021", specialization: ["Media Converter", "Optical Transceivers"], level: 4, zone: "all", city: "", country: "India", phone: "" },
 
 // ═══ NETWORKING SWITCHES ═══
-{ name: "Tushar Panchal", email: "tushar.panchal@goip.in", password: "tushar123", specialization: ["Networking Switch", "Grandstream UC", "Grandstream Networking"], level: 2, zone: "all", city: "", country: "India", phone: "" },
-{ name: "Baidyanath Mishra", email: "baidyanath.mishra@goip.in", password: "baidyanath123", specialization: ["Networking Switch", "Grandstream UC", "Grandstream Networking"], level: 3, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Tushar Panchal", email: "tushar.panchal@goip.in", password: "tushar123", specialization: ["Networking Switch", "Grandstream UC", "Grandstream Networking","Wireless Access Point"], level: 2, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Baidyanath Mishra", email: "baidyanath.mishra@goip.in", password: "baidyanath123", specialization: ["Networking Switch", "Grandstream UC", "Grandstream Networking","Wireless Access Point"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 // L4
 { name: "Baidyanath Mishra L4", email: "baidyanath.mishra1@goip.in", password: "baidyanath@2190", specialization: ["Networking Switch", "Grandstream UC", "Grandstream Networking"], level: 4, zone: "all", city: "", country: "India", phone: "" },
 
