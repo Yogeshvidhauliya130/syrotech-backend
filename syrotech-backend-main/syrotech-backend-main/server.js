@@ -502,6 +502,23 @@ app.get("/tickets", async (req, res) => {
     const filter = {};
     if (status)     filter.status     = status;
     if (ticketType) filter.ticketType = ticketType;
+    const typeFilterParam = req.query.typeFilter || "";
+if (typeFilterParam === "hr") {
+  filter.$or = [{ source: "hr" }, { source: "hradmin" }];
+}
+if (typeFilterParam === "lockin") {
+  filter.ticketType = "lockin";
+}
+if (typeFilterParam === "production") {
+  filter.ticketType = "production";
+}
+if (typeFilterParam === "testing") {
+  filter.ticketType = "product_testing";
+}
+if (typeFilterParam === "product") {
+  filter.source = { $nin: ["hr", "hradmin"] };
+  filter.ticketType = { $nin: ["lockin", "product_testing"] };
+}
    if (source) {
       if (source.includes(",")) {
         filter.source = { $in: source.split(",").map(s => s.trim()) };
