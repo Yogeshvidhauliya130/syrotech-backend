@@ -529,6 +529,23 @@ if (typeFilterParam === "product") {
     if (raisedBy)   filter.raisedBy   = raisedBy.toLowerCase();
     if (assignTo)   filter.assignTo   = assignTo;
 
+    const search = req.query.search || "";
+if (search) {
+  const regex = new RegExp(search, "i");
+  filter.$and = filter.$and || [];
+  filter.$and.push({
+    $or: [
+      { raisedByName: regex },
+      { customer: regex },
+      { companyName: regex },
+      { assignTo: regex },
+      { phone: regex },
+      { email: regex },
+      { serialNo: regex },
+    ]
+  });
+}
+
     // ✅ search by ticket number (exact match)
     const ticketNumber = req.query.ticketNumber || "";
     if (ticketNumber) filter.ticketNumber = parseInt(ticketNumber);
