@@ -333,7 +333,7 @@ app.post("/api/login", loginLimiter, async (req, res) => {
     );
     return res.json({
       token,
-      user: { email: process.env.HR_EMAIL, role: "hr", name: "HR Admin" }
+      user: { email: process.env.HR_EMAIL, role: "hr", name: "IT Team" }
     });
   }
 
