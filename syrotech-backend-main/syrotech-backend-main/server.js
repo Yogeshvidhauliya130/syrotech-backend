@@ -151,7 +151,7 @@ async function seedSupportPersons() {
 { name: "Shailendra Singh", email: "shailendra.singh@syrotech.com", password: "shailendra123", specialization: ["OLT","EMS/NMS"], level: 1, zone: "all", city: "", country: "India", phone: "" },
 { name: "Yogesh Kumar", email: "yogesh.kumar@goip.in", password: "yogesh123", specialization: ["OLT","EMS/NMS"], level: 1, zone: "all", city: "", country: "India", phone: "" },
 { name: "Udit Pathak", email: "udit.pathak@syrotech.com", password: "udit123", specialization: ["OLT","EMS/NMS"], level: 1, zone: "all", city: "", country: "India", phone: "" },
-{ name: "Arjun Kumar", email:"arjun.kumar@syrotech.com", password: "arjun123", specialization: ["OLT","EMS/NMS"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+// { name: "Arjun Kumar", email:"arjun.kumar@syrotech.com", password: "arjun123", specialization: ["OLT","EMS/NMS"], level: 1, zone: "all", city: "", country: "India", phone: "" },
 { name: "Harish Singh Bisht",email:"harish.bisht@syrotech.com", password: "harish123", specialization: ["OLT","ONT","EMS/NMS"], level: 2, zone: "all", city: "", country: "India", phone: "" },
 { name: "Gurupreet Singh", email: "gurupreet.singh@syrotech.com", password: "gurupreet123", specialization: ["OLT","EMS/NMS"], level: 2, zone: "all", city: "", country: "India", phone: "" },
 { name: "Nitesh Kumar Yadav", email: "nitesh.kumar@syrotech.com", password: "nitesh123", specialization: ["OLT","ONT","EMS/NMS"], level: 3, zone: "all", city: "", country: "India", phone: "" },
