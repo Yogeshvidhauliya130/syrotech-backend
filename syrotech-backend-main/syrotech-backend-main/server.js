@@ -800,16 +800,18 @@ if (!autoAssignTo && req.body.category) {
       matched = matched.filter(p => p.zone === "all" || p.zone === "all except south");
     }
 
-    if (matched.length > 0) {
-      let best = matched[0];
-      let bestCount = await Ticket.countDocuments({ assignTo: best.name });
-      for (const eng of matched.slice(1)) {
-        const c = await Ticket.countDocuments({ assignTo: eng.name });
-        if (c < bestCount) { bestCount = c; best = eng; }
-      }
-      autoAssignTo = best.name;
-      break;
-    }
+   if (matched.length > 0) {
+  const lastTicket = await Ticket.findOne({
+    assignTo: { $in: matched.map(p => p.name) }
+  }).sort({ createdAt: -1 });
+
+  const lastIndex = matched.findIndex(p => 
+    p.name === lastTicket?.assignTo
+  );
+  const nextIndex = (lastIndex + 1) % matched.length;
+  autoAssignTo = matched[nextIndex].name;
+  break;
+}
   }
 }
 
