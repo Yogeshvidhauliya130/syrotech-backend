@@ -520,12 +520,14 @@ if (typeFilterParam === "product") {
   filter.ticketType = { $nin: ["lockin", "product_testing"] };
 }
    if (source) {
-      if (source.includes(",")) {
-        filter.source = { $in: source.split(",").map(s => s.trim()) };
-      } else {
-        filter.source = source;
-      }
-    }
+  if (source === "sales") {
+    filter.source = { $nin: ["customer", "support", "hr", "hradmin"] };
+  } else if (source.includes(",")) {
+    filter.source = { $in: source.split(",").map(s => s.trim()) };
+  } else {
+    filter.source = source;
+  }
+}
     if (raisedBy)   filter.raisedBy   = raisedBy.toLowerCase();
     if (assignTo)   filter.assignTo   = assignTo;
 
