@@ -140,11 +140,7 @@ mongoose.connect(process.env.MONGO_URI)
    ✅ UPDATED WITH REAL TEAM LIST
 ══════════════════════════════════ */
 async function seedSupportPersons() {
- const already = await User.findOne({ email: "__seed_done__" });
-if (already) {
-  console.log("⏭️ Seed skipped!");
-  return;
-}
+ 
    const list = [
     // ═══ OLT ═══
    { name: "Ankush Pal", email: "ankush.pal@syrotech.com", password: "ankush123", specialization: ["OLT","EMS/NMS"], level: 1, zone: "all", city: "", country: "India", phone: "" },
@@ -224,6 +220,10 @@ if (already) {
   for (const p of list) {
     const exists = await User.findOne({ email: p.email });
     if (!exists) {
+      if (await User.findOne({ email: p.email, deletedByAdmin: true })) {
+        console.log("⏭️ Skipping admin-deleted:", p.name);
+        continue;
+      }
       const hashed = await bcrypt.hash(p.password, 10);
       await User.create({ ...p, password: hashed, role: "support", approved: true });
       console.log("✅ Added support person:", p.name);
@@ -246,8 +246,7 @@ if (already) {
 }
   }
     // ✅ ADD THIS
-  await User.create({ email: "__seed_done__", name: "seed", role: "system", password: "x", approved: false });
-  console.log("✅ Seed complete!");
+  
 }
 
 /* ══════════════════════════════════
@@ -435,7 +434,15 @@ app.patch("/api/users/:email/leave", async (req, res) => {
 
 app.delete("/api/users/:email", async (req, res) => {
   try {
-    await User.findOneAndDelete({ email: req.params.email });
+    const user = await User.findOne({ email: req.params.email });
+    if (user?.role === "support") {
+      await User.findOneAndUpdate(
+        { email: req.params.email },
+        { $set: { deletedByAdmin: true, approved: false } }
+      );
+    } else {
+      await User.findOneAndDelete({ email: req.params.email });
+    }
     res.json({ message: "Removed." });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
