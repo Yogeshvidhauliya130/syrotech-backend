@@ -327,24 +327,24 @@ app.post("/api/login", loginLimiter, async (req, res) => {
   // ✅ HR login
   if (email === process.env.HR_EMAIL && password === process.env.HR_PASSWORD) {
     const token = jwt.sign(
-      { email: process.env.HR_EMAIL, role: "hr", name: "HR Admin" },
+      { email: process.env.HR_EMAIL, role: "hr", name: "IT Team" },
       JWT_SECRET, { expiresIn: "12h" }
     );
     return res.json({
       token,
-      user: { email: process.env.HR_EMAIL, role: "hr", name: "HR Admin" }
+      user: { email: process.env.HR_EMAIL, role: "hr", name: "IT Team" }
     });
   }
 
   // ✅ HrAdmin login
   if (email === process.env.HRADMIN_USERNAME && password === process.env.HRADMIN_PASSWORD) {
     const token = jwt.sign(
-      { email: process.env.HRADMIN_USERNAME, role: "hradmin", name: "HR Admin" },
+      { email: process.env.HRADMIN_USERNAME, role: "hradmin", name: "IT Team" },
       JWT_SECRET, { expiresIn: "12h" }
     );
     return res.json({
       token,
-      user: { email: process.env.HRADMIN_USERNAME, role: "hradmin", name: "HR Admin" }
+      user: { email: process.env.HRADMIN_USERNAME, role: "hradmin", name: "IT Team" }
     });
   }
 
