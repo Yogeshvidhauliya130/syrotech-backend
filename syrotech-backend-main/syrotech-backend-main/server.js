@@ -284,7 +284,7 @@ app.post("/api/signup", async (req, res) => {
     const exists = await User.findOne({ email: email.toLowerCase() });
     if (exists) return res.status(400).json({ error: "Email already registered." });
     const hashed    = await bcrypt.hash(password, 10);
-    const finalRole = role === "customer" ? "customer" : role === "support" ? "support" : "user";
+   const finalRole = role === "customer" ? "customer" : role === "support" ? "support" : role === "rnd" ? "rnd" : "user";
     await User.create({
   name,
   email:          email.toLowerCase(),
@@ -294,6 +294,7 @@ app.post("/api/signup", async (req, res) => {
   customerType:   customerType           || "",
   salesPerson:    req.body.salesPerson   || "",
   role:           finalRole,
+  designation:    req.body.designation   || "",
   approved:       false,
   city:           req.body.city          || "",
   country:        req.body.country       || "",
