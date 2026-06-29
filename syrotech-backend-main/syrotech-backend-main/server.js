@@ -785,15 +785,21 @@ if (!autoAssignTo && req.body.category) {
   const allSupport = await User.find({ role: "support", approved: true });
   const category = (req.body.category || "").toLowerCase();
 
-  // ✅ LOCKIN ONLY: if a lockin engineer raised it, assign to themselves
-  if (req.body.ticketType === "lockin" && req.body.raisedBy) {
+  // ✅ LOCKIN: if a lockin engineer raised it, assign to themselves
+  // ✅ LOCKIN: if a sales person raised it, always assign to Tejvir Singh
+  if (req.body.ticketType === "lockin") {
     const raiser = allSupport.find(p => {
       const specs = Array.isArray(p.specialization) ? p.specialization : [];
-      return p.email.toLowerCase() === req.body.raisedBy.toLowerCase()
+      return p.email.toLowerCase() === (req.body.raisedBy || "").toLowerCase()
         && specs.map(s => s.toLowerCase()).includes(category);
     });
     if (raiser) {
+      // Lockin support person raised it → assign to themselves
       autoAssignTo = raiser.name;
+    } else {
+      // Sales person raised it → always assign to Tejvir Singh
+      const tejvir = allSupport.find(p => p.email === "tejvir.singh@goip.in");
+      if (tejvir) autoAssignTo = tejvir.name;
     }
   }
   const state = (req.body.state || "").toLowerCase();
