@@ -104,6 +104,7 @@ reopenedAt:           { type: String, default: null },
 latestStatusUpdate: { type: String, default: "" },
   originalDescription:  { type: String, default: "" },
   priority: { type: String, default: "low" },
+taskRole: { type: String, default: "" },
   feedbackToken: { type: String, default: "" },
   
 
