@@ -64,7 +64,9 @@ productImage:  { type: String, default: "" },
   issueHistory: { type: Array, default: [] },
 
   // Resolution fields
-  resolutionNotes:     { type: String, default: "" },
+  resolutionNotes: { type: String, default: "" },
+pendingUpdateFrom: { type: String, default: "" },
+  
   resolutionStatus:    { type: String, default: "" },
   resolutionTimeTaken: { type: String, default: "" },
   resolvedBy:          { type: String, default: "" },
