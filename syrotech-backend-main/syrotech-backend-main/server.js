@@ -542,6 +542,14 @@ if (typeFilterParam === "product") {
     if (raisedBy)   filter.raisedBy   = raisedBy.toLowerCase();
     if (assignTo)   filter.assignTo   = assignTo;
 
+    // ✅ NEW: Product filter (category / subCategory / model) — server-side
+    const category    = req.query.category    || "";
+    const subCategory = req.query.subCategory || "";
+    const model       = req.query.model       || "";
+    if (category)    filter.category    = category;
+    if (subCategory) filter.subCategory = subCategory;
+    if (model)       filter.model       = model;
+
     const search = req.query.search || "";
 if (search) {
   const regex = new RegExp(search, "i");
