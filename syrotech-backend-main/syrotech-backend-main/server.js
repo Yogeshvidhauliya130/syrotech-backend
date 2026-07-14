@@ -1190,6 +1190,18 @@ app.post("/api/feedback/generate-token/:ticketId", async (req, res) => {
   }
 });
    
+
+
+app.get("/api/tickets/performance-lite", async (req, res) => {
+  try {
+    const tickets = await Ticket.find({})
+      .select("-productImage -productImages -fileBase64 -logoImage -issueHistory -reassignHistory -statusUpdates")
+      .lean();
+    res.json({ tickets: tickets.map(t => ({ ...t, id: t._id.toString() })) });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 /* ══════════════════════════════════
    START SERVER
 ══════════════════════════════════ */
