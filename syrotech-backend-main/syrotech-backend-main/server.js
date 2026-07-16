@@ -213,7 +213,8 @@ async function seedSupportPersons() {
 // production support 
 { name: "Nishant Gupta", email: "nishant.gupta@goip.in", password: "nishant@1111", specialization: ["Production"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 
-
+//RMA support
+{ name: "Ravi Kumar", email: "ravi.kumar@goip.in", password: "ravi@1111", specialization: ["RMA"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 
 
 ];
@@ -528,9 +529,12 @@ if (typeFilterParam === "testing") {
 if (typeFilterParam === "rnd") {
   filter.ticketType = "rnd";
 }
+if (typeFilterParam === "rma") {
+  filter.ticketType = "rma";
+}
 if (typeFilterParam === "product") {
   filter.source = { $nin: ["hr", "hradmin"] };
-  filter.ticketType = { $nin: ["lockin", "product_testing", "rnd"] };
+  filter.ticketType = { $nin: ["lockin", "product_testing", "rnd", "rma"] };
 }
    if (source) {
   if (source === "sales") {
