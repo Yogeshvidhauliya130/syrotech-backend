@@ -548,6 +548,12 @@ if (typeFilterParam === "product") {
     if (raisedBy)   filter.raisedBy   = raisedBy.toLowerCase();
     if (assignTo)   filter.assignTo   = assignTo;
 
+    // ✅ NEW: rmaHandler — used by RMA portal, matches tickets assigned OR sent-to-RMA
+    const rmaHandler = req.query.rmaHandler || "";
+    if (rmaHandler) {
+      filter.$or = [{ assignTo: rmaHandler }, { rmaAssignedTo: rmaHandler }];
+    }
+
     // ✅ NEW: Product filter (category / subCategory / model) — server-side
     const category    = req.query.category    || "";
     const subCategory = req.query.subCategory || "";

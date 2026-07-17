@@ -53,6 +53,7 @@ productImage:  { type: String, default: "" },
   // RMA fields
   rmaStatus:        { type: Boolean, default: false },
   rmaReason:        { type: String,  default: "" },
+   rmaAssignedTo:    { type: String,  default: "" },
   rmaCenterName:    { type: String,  default: "" },
   rmaCenterCity:    { type: String,  default: "" },
   rmaCenterAddress: { type: String,  default: "" },
