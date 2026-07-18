@@ -534,7 +534,7 @@ if (typeFilterParam === "rma") {
 }
 if (typeFilterParam === "product") {
   filter.source = { $nin: ["hr", "hradmin"] };
-  filter.ticketType = { $nin: ["lockin", "product_testing", "rnd", "rma"] };
+  filter.ticketType = { $nin: ["lockin", "product_testing", "rnd"] };
 }
    if (source) {
   if (source === "sales") {
