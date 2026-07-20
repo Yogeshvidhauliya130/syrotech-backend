@@ -572,6 +572,7 @@ if (search) {
       { customer: regex },
       { companyName: regex },
       { assignTo: regex },
+      { rmaAssignedTo: regex },
       { phone: regex },
       { email: regex },
       { serialNo: regex },
