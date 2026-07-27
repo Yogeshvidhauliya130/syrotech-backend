@@ -800,8 +800,31 @@ if (!companyName && req.body.raisedBy) {
 let autoAssignTo = req.body.assignTo || "";
 let autoPriority = "low";
 
-// ✅ Backend fallback auto-assign
-// ✅ Backend fallback auto-assign
+// ✅ PRODUCTION TICKET FIXED ASSIGNMENT — category → EMAIL (unique), then resolve to that person's current name
+if (req.body.ticketType === "production") {
+  const prodCategory = (req.body.category || "").toLowerCase().trim();
+  const PRODUCTION_ASSIGN_EMAIL_MAP = {
+    "olt": "nishant.gupta@goip.in",
+    "ont": "nishant.gupta@goip.in",
+    "wireless access point": "nishant.gupta@goip.in",
+    "media converter": "nishant.gupta@goip.in",
+    "networking switch": "nishant.gupta@goip.in",
+    "cctv": "nishant.gupta@goip.in",
+    "grandstream uc": "nishant.gupta@goip.in",
+    "grandstream networking": "nishant.gupta@goip.in",
+    "optical transceivers": "mohit.mittal@goip.in",
+    "entrance product": "gagandeep.sodhi@goip.in",
+    "passive products": "archna.verma@goip.in",
+    "firewall/sdwan": "naman.gupta@goip.in",
+    "anroid box": "naman.gupta@goip.in",
+    "ems/nms": "tejvir.singh@goip.in",
+  };
+  const prodEmail = PRODUCTION_ASSIGN_EMAIL_MAP[prodCategory] || "nishant.gupta@goip.in";
+  const prodPerson = await User.findOne({ email: prodEmail.toLowerCase() });
+  autoAssignTo = prodPerson?.name || "Nishant Gupta";
+}
+
+// ✅ Backend fallback auto-assign (unchanged — only runs for non-production tickets)
 if (!autoAssignTo && req.body.category) {
   const allSupport = await User.find({ role: "support", approved: true });
   const category = (req.body.category || "").toLowerCase();
@@ -855,7 +878,7 @@ if (!autoAssignTo && req.body.category) {
   }
 }
 
-if (companyName) {
+if (companyName && req.body.ticketType !== "production") {
   const isHighPriority = await PriorityCompany.findOne({
     companyName: { $regex: new RegExp(`^${companyName}$`, "i") }
   });
