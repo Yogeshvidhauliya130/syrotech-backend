@@ -813,7 +813,7 @@ if (req.body.ticketType === "production") {
     "grandstream uc": "nishant.gupta@goip.in",
     "grandstream networking": "nishant.gupta@goip.in",
     "optical transceivers": "mohit.mittal@goip.in",
-    "entrance product": "gagandeep.sodhi@goip.in",
+    "entrance product": "rabi.sharma1@goip.in",
     "passive products": "archna.verma@goip.in",
     "firewall/sdwan": "naman.gupta@goip.in",
     "anroid box": "naman.gupta@goip.in",
