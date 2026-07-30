@@ -830,15 +830,27 @@ if (req.body.ticketType === "production") {
   autoAssignTo = prodPerson?.name || "Nishant Gupta";
 }
 
-// ✅ LOGISTIC TICKET FIXED ASSIGNMENT — always starts with L1 (Logistics NP)
+// ✅ LOGISTIC TICKET ASSIGNMENT
+// If a Logistics engineer (L1/L2/L3) raises it themselves → assign to themselves
+// If anyone else (e.g. sales) raises it → assign to L1 (Logistics NP)
 if (req.body.ticketType === "logistic" && !autoAssignTo) {
-  const l1Person = await User.findOne({ email: "logisticsnp@goip.in" });
-  autoAssignTo = l1Person?.name || "Logistics NP";
+  const raiserPerson = await User.findOne({ email: (req.body.raisedBy || "").toLowerCase() });
+  const raiserIsLogisticsEngineer =
+    raiserPerson &&
+    Array.isArray(raiserPerson.specialization) &&
+    raiserPerson.specialization.includes("Logistics");
+
+  if (raiserIsLogisticsEngineer) {
+    autoAssignTo = raiserPerson.name;
+  } else {
+    const l1Person = await User.findOne({ email: "logisticsnp@goip.in" });
+    autoAssignTo = l1Person?.name || "Logistics NP";
+  }
 }
 
 // ✅ Backend fallback auto-assign (unchanged — only runs for non-production tickets)
 if (!autoAssignTo && req.body.category) {
-  
+
   const allSupport = await User.find({ role: "support", approved: true });
   const category = (req.body.category || "").toLowerCase();
 
