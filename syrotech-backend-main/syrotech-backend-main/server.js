@@ -538,9 +538,12 @@ if (typeFilterParam === "rnd") {
 if (typeFilterParam === "rma") {
   filter.ticketType = "rma";
 }
+if (typeFilterParam === "logistic") {
+  filter.ticketType = "logistic";
+}
 if (typeFilterParam === "product") {
   filter.source = { $nin: ["hr", "hradmin"] };
-  filter.ticketType = { $nin: ["lockin", "product_testing", "rnd"] };
+  filter.ticketType = { $nin: ["lockin", "product_testing", "rnd", "logistic"] };
 }
    if (source) {
   if (source === "sales") {
