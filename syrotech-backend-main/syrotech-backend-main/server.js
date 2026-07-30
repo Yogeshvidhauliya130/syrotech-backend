@@ -217,6 +217,12 @@ async function seedSupportPersons() {
 { name: "Ravi Kumar", email: "ravi.kumar@goip.in", password: "ravi@1111", specialization: ["RMA"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 
 
+// Logistics support
+{ name: "Logistics NP", email: "logisticsnp@goip.in", password: "logistics@111", specialization: ["Logistics"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Ajay Kumar",   email: "ajay.k@goip.in",       password: "ajay@222",     specialization: ["Logistics"], level: 2, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Anurag Gupta", email: "anurag.gupta@goip.in", password: "anurag@333",   specialization: ["Logistics"], level: 3, zone: "all", city: "", country: "India", phone: "" },
+
+
 ];
  
 
@@ -824,8 +830,15 @@ if (req.body.ticketType === "production") {
   autoAssignTo = prodPerson?.name || "Nishant Gupta";
 }
 
+// ✅ LOGISTIC TICKET FIXED ASSIGNMENT — always starts with L1 (Logistics NP)
+if (req.body.ticketType === "logistic" && !autoAssignTo) {
+  const l1Person = await User.findOne({ email: "logisticsnp@goip.in" });
+  autoAssignTo = l1Person?.name || "Logistics NP";
+}
+
 // ✅ Backend fallback auto-assign (unchanged — only runs for non-production tickets)
 if (!autoAssignTo && req.body.category) {
+  
   const allSupport = await User.find({ role: "support", approved: true });
   const category = (req.body.category || "").toLowerCase();
 
