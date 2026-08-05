@@ -25,6 +25,14 @@ const ticketSchema = new mongoose.Schema({
   country:      { type: String, default: "" },
   pincode:      { type: String, default: "" },
 
+  // Logistic ticket fields
+  courierCompany:      { type: String, default: "" },
+  invoiceNumber:       { type: String, default: "" },
+  invoiceDate:         { type: String, default: "" },
+  dispatchDate:        { type: String, default: "" },
+  deliveryDestination: { type: String, default: "" },
+  trackingDetails:     { type: String, default: "" },
+
   // ✅ NEW: Source of ticket — "user" = customer raised, "support" = support person raised
   source:       { type: String, default: "user" },
 
