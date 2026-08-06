@@ -169,7 +169,7 @@ async function seedSupportPersons() {
 { name: "S.K.Seenivasan", email: "seenivasan.sk@goip.in", password: "seenivasan123", specialization: ["ONT","Networking Switch", "Grandstream UC", "Grandstream Networking","EMS/NMS"], level: 1, zone: "South Region", city: "", country: "India", phone: "" },
 { name: "Umesh Bari", email: "umesh.bari@syrotech.com", password: "umesh123", specialization: ["ONT","EMS/NMS"], level: 2, zone: "all except south", city: "", country: "India", phone: "" },
 // { name: "Vivek Kumar", email: "vivek.pawar@syrotech.com", password: "vivek123", specialization: ["ONT","EMS/NMS"], level: 2, zone: "all except south", city: "", country: "India", phone: "" },
-{ name: "Shekhar Rana", email: "shekhar.rana@syrotech.com", password: "shekhar123", specialization: ["ONT","EMS/NMS"], level: 2, zone: "all except south", city: "", country: "India", phone: "" },
+{ name: "Shekhar Rana", email: "shekhar.rana@syrotech.com", password: "shekhar123", specialization: ["OLT","EMS/NMS"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
 
 // ═══ SFP & MEDIA CONVERTER ═══
 // { name: "RamTirth Bhargav", email: "ramtirth.bhargav@syrotech.com", password: "ramtirth123", specialization: ["Media Converter", "Optical Transceivers"], level: 1, zone: "all", city: "", country: "India", phone: "" },
