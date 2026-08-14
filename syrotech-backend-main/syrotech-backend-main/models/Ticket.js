@@ -116,8 +116,11 @@ latestStatusUpdate: { type: String, default: "" },
   originalDescription:  { type: String, default: "" },
   priority: { type: String, default: "low" },
 taskRole: { type: String, default: "" },
-  feedbackToken: { type: String, default: "" },
-  
+ feedbackToken: { type: String, default: "" },
+
+  // ✅ WhatsApp webhook fields
+  waMessageId: { type: String, default: "" },
+  waMessageSentAt: { type: String, default: null },
 
 }, { timestamps: true });
 

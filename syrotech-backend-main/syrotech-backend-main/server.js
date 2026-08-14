@@ -10,6 +10,7 @@ const { Resend } = require("resend");
 const smsOtpStore = {};
 const resend = new Resend(process.env.RESEND_API_KEY);
 const path     = require("path");
+const axios    = require("axios");
 const User            = require("./models/User");
 const Ticket          = require("./models/Ticket");
 const PriorityCompany = require("./models/PriorityCompany");
@@ -1264,6 +1265,82 @@ app.get("/api/tickets/performance-lite", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+/* ══════════════════════════════════
+   ✅ WHATSAPP WEBHOOK — receives feedback stars & reopen clicks
+══════════════════════════════════ */
+app.post("/api/whatsapp/webhook", async (req, res) => {
+  try {
+    console.log("📩 WhatsApp webhook received:", JSON.stringify(req.body));
+
+    const msg = req.body?.msg;
+    if (!msg) return res.status(200).json({ received: true });
+
+    const contextMessageId = msg.contextMessageId;
+    if (!contextMessageId) {
+      console.log("⚠️ No contextMessageId in webhook payload — skipping.");
+      return res.status(200).json({ received: true });
+    }
+
+    const ticket = await Ticket.findOne({ waMessageId: contextMessageId });
+    if (!ticket) {
+      console.log("⚠️ No ticket found for contextMessageId:", contextMessageId);
+      return res.status(200).json({ received: true });
+    }
+
+    // Case 1: Star rating (interactive/list_reply)
+    if (msg.type === "interactive" && msg.interactive?.type === "list_reply") {
+      const title = msg.interactive.list_reply?.title || "";
+      const starCount = (title.match(/⭐/g) || []).length;
+      if (starCount >= 1 && starCount <= 5 && !ticket.feedbackRating) {
+        await Ticket.findByIdAndUpdate(ticket._id, {
+          feedbackRating: starCount,
+          feedbackReceivedAt: new Date().toISOString(),
+        });
+        console.log(`✅ Feedback ${starCount}★ saved for ticket #${ticket.ticketNumber}`);
+      }
+    }
+
+    // Case 2: Reopen Ticket button
+    if (msg.type === "button" && msg.button?.text === "Reopen Ticket") {
+      const sentAt = ticket.waMessageSentAt ? new Date(ticket.waMessageSentAt) : null;
+      const hoursSince = sentAt ? (Date.now() - sentAt.getTime()) / (1000 * 60 * 60) : 999;
+
+      if (hoursSince <= 48) {
+        const existingHistory = Array.isArray(ticket.issueHistory) ? ticket.issueHistory : [];
+        const newEntry = {
+          description: "Customer requested reopen via WhatsApp",
+          raisedBy: "customer",
+          raisedByName: ticket.customer,
+          raisedAt: new Date().toISOString(),
+          assignTo: ticket.assignTo,
+        };
+        await Ticket.findByIdAndUpdate(ticket._id, {
+          status: "reopened",
+          resolvedAt: null,
+          reopenedAt: new Date().toISOString(),
+          reopenCount: (ticket.reopenCount || 0) + 1,
+          issueHistory: [...existingHistory, newEntry],
+          firstResolvedNotes: ticket.firstResolvedNotes || ticket.resolutionNotes || null,
+          firstResolvedAt: ticket.firstResolvedAt || ticket.resolvedAt || null,
+          firstResolvedBy: ticket.firstResolvedBy || ticket.resolvedBy || null,
+        });
+        console.log(`✅ Ticket #${ticket.ticketNumber} reopened via WhatsApp`);
+      } else {
+        console.log(`⏱️ Reopen rejected — ticket #${ticket.ticketNumber} outside 48hr window`);
+      }
+    }
+
+    res.status(200).json({ received: true });
+  } catch (err) {
+    console.error("Webhook error:", err.message);
+    res.status(200).json({ received: true });
+  }
+});
+
+/* ══════════════════════════════════
+   START SERVER
+══════════════════════════════════ */
 /* ══════════════════════════════════
    START SERVER
 ══════════════════════════════════ */
