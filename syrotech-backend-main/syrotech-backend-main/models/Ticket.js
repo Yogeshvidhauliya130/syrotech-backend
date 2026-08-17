@@ -120,6 +120,7 @@ taskRole: { type: String, default: "" },
 
   // ✅ WhatsApp webhook fields
   waMessageId: { type: String, default: "" },
+  waContextId: { type: String, default: "" },
   waMessageSentAt: { type: String, default: null },
 
 }, { timestamps: true });

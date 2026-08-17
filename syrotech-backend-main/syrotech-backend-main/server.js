@@ -1352,6 +1352,17 @@ app.post("/api/whatsapp/webhook", async (req, res) => {
   try {
     console.log("📩 WhatsApp webhook received:", JSON.stringify(req.body));
 
+  // ✅ NEW: capture delivery receipt (dlr) to link waMessageId → waContextId
+    const dlr = req.body?.dlr;
+    if (dlr && dlr.messageId && dlr.id) {
+      const ticketByMsgId = await Ticket.findOne({ waMessageId: dlr.messageId, waContextId: "" });
+      if (ticketByMsgId) {
+        await Ticket.findByIdAndUpdate(ticketByMsgId._id, { waContextId: dlr.id });
+        console.log(`✅ Linked waContextId ${dlr.id} to ticket #${ticketByMsgId.ticketNumber}`);
+      }
+      return res.status(200).json({ received: true });
+    }
+
     const msg = req.body?.msg;
     if (!msg) return res.status(200).json({ received: true });
 
@@ -1361,7 +1372,7 @@ app.post("/api/whatsapp/webhook", async (req, res) => {
       return res.status(200).json({ received: true });
     }
 
-    const ticket = await Ticket.findOne({ waMessageId: contextMessageId });
+   const ticket = await Ticket.findOne({ waContextId: contextMessageId });
     if (!ticket) {
       console.log("⚠️ No ticket found for contextMessageId:", contextMessageId);
       return res.status(200).json({ received: true });
