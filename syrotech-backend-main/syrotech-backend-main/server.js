@@ -1354,11 +1354,15 @@ app.post("/api/whatsapp/webhook", async (req, res) => {
 
   // ✅ NEW: capture delivery receipt (dlr) to link waMessageId → waContextId
     const dlr = req.body?.dlr;
-    if (dlr && dlr.messageId && dlr.id) {
-      const ticketByMsgId = await Ticket.findOne({ waMessageId: dlr.messageId, waContextId: "" });
-      if (ticketByMsgId) {
-        await Ticket.findByIdAndUpdate(ticketByMsgId._id, { waContextId: dlr.id });
-        console.log(`✅ Linked waContextId ${dlr.id} to ticket #${ticketByMsgId.ticketNumber}`);
+    if (dlr && dlr.id && dlr.recipient_id) {
+      const last10 = dlr.recipient_id.replace(/\D/g, "").slice(-10);
+      const ticketByPhone = await Ticket.findOne({
+        phone: { $regex: last10 + "$" },
+        waMessageId: { $ne: "" },
+      }).sort({ waMessageSentAt: -1 });
+      if (ticketByPhone) {
+        await Ticket.findByIdAndUpdate(ticketByPhone._id, { waContextId: dlr.id });
+        console.log(`✅ Linked waContextId ${dlr.id} to ticket #${ticketByPhone.ticketNumber} (by phone)`);
       }
       return res.status(200).json({ received: true });
     }
