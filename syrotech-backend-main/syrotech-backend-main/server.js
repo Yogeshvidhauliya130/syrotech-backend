@@ -11,6 +11,68 @@ const smsOtpStore = {};
 const resend = new Resend(process.env.RESEND_API_KEY);
 const path     = require("path");
 const axios    = require("axios");
+
+const WA_TEMPLATES = {
+  resolve: {
+    accessToken: "19c41169-d911-4b2e-9827-1c99e0f8a6a0",
+    templateId:  "6143e70a-cbce-4cc0-876e-8c0cd9d2b4f7",
+  },
+  rma: {
+    accessToken: "c187679a-a868-4e8a-a3df-c3c9f4de7640",
+    templateId:  "4b0db50b-0fbb-42e2-ac6d-aed8f64b63e1",
+  },
+};
+
+async function sendWhatsAppTemplate(ticket, type) {
+  try {
+    const config = WA_TEMPLATES[type];
+    if (!config) return null;
+
+    const phone = (ticket.phone || "").replace(/\D/g, "");
+    if (!phone || phone.length < 10) {
+      console.log("⚠️ Cannot send WhatsApp — invalid phone for ticket", ticket.ticketNumber);
+      return null;
+    }
+    const toNumber = phone.startsWith("91") ? phone : `91${phone}`;
+
+    const payload = [
+      {
+        template: {
+          id: config.templateId,
+          components: [
+            {
+              type: "body",
+              parameters: [
+                { type: "text", text: String(ticket.ticketNumber || "") }
+              ],
+            },
+          ],
+        },
+        to: toNumber,
+        type: "template",
+      },
+    ];
+
+    const response = await axios.post(
+      "https://wa.chatmybot.in/gateway/wabuissness/v1/message/batchapi",
+      payload,
+      { headers: { accessToken: config.accessToken, "Content-Type": "application/json" } }
+    );
+
+    console.log("✅ WhatsApp template sent:", JSON.stringify(response.data));
+
+    const returnedId =
+      response.data?.[0]?.messageId ||
+      response.data?.[0]?.id ||
+      response.data?.messageId ||
+      null;
+
+    return returnedId;
+  } catch (err) {
+    console.error("❌ WhatsApp send failed:", err.response?.data || err.message);
+    return null;
+  }
+}
 const User            = require("./models/User");
 const Ticket          = require("./models/Ticket");
 const PriorityCompany = require("./models/PriorityCompany");
@@ -987,6 +1049,27 @@ const ticket = await Ticket.findByIdAndUpdate(
   req.params.id, { $set: updateData }, { returnDocument: "after" }
 );
     if (!ticket) return res.status(404).json({ error: "Not found." });
+
+    // ✅ NEW: auto-send WhatsApp template when status changes to resolved or rma
+    if (updateData.status === "resolved" && existing?.status !== "resolved") {
+      const msgId = await sendWhatsAppTemplate(ticket, "resolve");
+      if (msgId) {
+        await Ticket.findByIdAndUpdate(ticket._id, {
+          waMessageId: msgId,
+          waMessageSentAt: new Date().toISOString(),
+        });
+      }
+    }
+    if (updateData.status === "rma" && existing?.status !== "rma") {
+      const msgId = await sendWhatsAppTemplate(ticket, "rma");
+      if (msgId) {
+        await Ticket.findByIdAndUpdate(ticket._id, {
+          waMessageId: msgId,
+          waMessageSentAt: new Date().toISOString(),
+        });
+      }
+    }
+
     res.json({ ...ticket.toObject(), id: ticket._id.toString() });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
