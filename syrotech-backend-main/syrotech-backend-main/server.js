@@ -61,11 +61,7 @@ async function sendWhatsAppTemplate(ticket, type) {
 
     console.log("✅ WhatsApp template sent:", JSON.stringify(response.data));
 
-    const returnedId =
-      response.data?.[0]?.messageId ||
-      response.data?.[0]?.id ||
-      response.data?.messageId ||
-      null;
+    const returnedId = response.data?.ids?.[0] || null;
 
     return returnedId;
   } catch (err) {
