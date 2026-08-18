@@ -278,6 +278,7 @@ async function seedSupportPersons() {
 
 // Logistics support
 { name: "Logistics NP", email: "logisticsnp@goip.in", password: "logistics@111", specialization: ["Logistics"], level: 1, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Yogesh", email: "Yogeshvidhauliya130@gmail.com", password: "1234", specialization: ["Logistics"], level: 1, zone: "all", city: "", country: "India", phone: "" },
 { name: "Ajay Kumar",   email: "ajay.k@goip.in",       password: "ajay@222",     specialization: ["Logistics"], level: 2, zone: "all", city: "", country: "India", phone: "" },
 { name: "Anurag Gupta", email: "anurag.gupta@goip.in", password: "anurag@333",   specialization: ["Logistics"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 
