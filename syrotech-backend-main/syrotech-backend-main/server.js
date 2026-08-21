@@ -255,6 +255,7 @@ async function seedSupportPersons() {
 { name: "Archna Verma", email: "archna.verma@goip.in", password: "archana123", specialization: ["Passive Products"], level: 1, zone: "all", city: "", country: "India", phone: "" },
 { name: "Kishan Kumar", email: "kishan.kumar@goip.in", password: "kishan123", specialization: ["Passive Products"], level: 2, zone: "all", city: "", country: "India", phone: "" },
 { name: "Akhil Sharma", email: "akhil.sharma@goip.in", password: "akhil123", specialization: ["Passive Products"], level: 3, zone: "all", city: "", country: "India", phone: "" },
+{ name: "Neeraj Chaudhary", email: "neeraj.chaudhary@syrotech.com", password: "neeraj123", specialization: ["Passive Products"], level: 3, zone: "all", city: "", country: "India", phone: "" },
 // L4
 { name: "Akhil Sharma L4", email: "akhil.sharma1@goip.in", password: "akhil@9823", specialization: ["Passive Products"], level: 4, zone: "all", city: "", country: "India", phone: "" },
 
