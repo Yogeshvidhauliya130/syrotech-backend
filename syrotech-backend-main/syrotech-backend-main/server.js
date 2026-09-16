@@ -1086,25 +1086,30 @@ app.delete("/tickets/:id", async (req, res) => {
    ✅ BACKUP ENDPOINT
 ══════════════════════════════════ */
 app.get("/api/backup", verifyAdmin, async (req, res) => {
-  
   try {
-    const tickets = await Ticket.find().lean();
-    const users   = await User.find({}, "-password").lean();
-    const backup  = {
-      exportedAt:   new Date().toISOString(),
-      totalTickets: tickets.length,
-      totalUsers:   users.length,
-      tickets,
-      users,
-    };
+    const users = await User.find({}, "-password").lean();
+    const totalTickets = await Ticket.countDocuments();
+
     res.setHeader("Content-Disposition", `attachment; filename=syrotech_backup_${new Date().toISOString().slice(0,10)}.json`);
     res.setHeader("Content-Type", "application/json");
-    res.send(JSON.stringify(backup, null, 2));
+
+    res.write(`{"exportedAt":"${new Date().toISOString()}","totalTickets":${totalTickets},"totalUsers":${users.length},"users":${JSON.stringify(users)},"tickets":[`);
+
+    const cursor = Ticket.find().select("-productImage -productImages -fileBase64 -logoImage").lean().cursor();
+    let first = true;
+    for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+      if (!first) res.write(",");
+      res.write(JSON.stringify(doc));
+      first = false;
+    }
+
+    res.write("]}");
+    res.end();
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    if (!res.headersSent) res.status(500).json({ error: err.message });
+    else res.end();
   }
 });
-
 
 /* ══════════════════════════════════
    FORGOT PASSWORD — Send OTP
