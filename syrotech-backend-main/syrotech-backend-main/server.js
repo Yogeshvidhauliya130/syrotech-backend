@@ -688,7 +688,7 @@ if (search) {
     const reopenedCount = await Ticket.countDocuments({ ...filter, status: "reopened" });
 
     const tickets    = await Ticket.find(filter)
-      .select("-productImage")
+      .select("-productImage -productImages -fileBase64 -logoImage")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
