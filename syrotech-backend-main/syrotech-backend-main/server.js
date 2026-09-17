@@ -1073,6 +1073,17 @@ const ticket = await Ticket.findByIdAndUpdate(
 });
 
 /* ══════════════════════════════════
+   ✅ GET SINGLE TICKET (with images/files — used when opening ticket details)
+══════════════════════════════════ */
+app.get("/tickets/:id/full", async (req, res) => {
+  try {
+    const ticket = await Ticket.findById(req.params.id);
+    if (!ticket) return res.status(404).json({ error: "Not found." });
+    res.json({ ...ticket.toObject(), id: ticket._id.toString() });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+/* ══════════════════════════════════
    DELETE TICKET
 ══════════════════════════════════ */
 app.delete("/tickets/:id", async (req, res) => {
@@ -1343,12 +1354,26 @@ app.post("/api/feedback/generate-token/:ticketId", async (req, res) => {
 
 app.get("/api/tickets/performance-lite", async (req, res) => {
   try {
-    const tickets = await Ticket.find({})
+    res.setHeader("Content-Type", "application/json");
+    res.write(`{"tickets":[`);
+
+    const cursor = Ticket.find({})
       .select("-productImage -productImages -fileBase64 -logoImage -issueHistory -reassignHistory -statusUpdates")
-      .lean();
-    res.json({ tickets: tickets.map(t => ({ ...t, id: t._id.toString() })) });
+      .lean()
+      .cursor();
+
+    let first = true;
+    for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+      if (!first) res.write(",");
+      res.write(JSON.stringify({ ...doc, id: doc._id.toString() }));
+      first = false;
+    }
+
+    res.write(`]}`);
+    res.end();
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    if (!res.headersSent) res.status(500).json({ error: err.message });
+    else res.end();
   }
 });
 
