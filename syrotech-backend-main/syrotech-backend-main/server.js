@@ -1049,7 +1049,7 @@ const ticket = await Ticket.findByIdAndUpdate(
     if (!ticket) return res.status(404).json({ error: "Not found." });
 
     // ✅ NEW: auto-send WhatsApp template when status changes to resolved or rma
-    if (updateData.status === "resolved" && existing?.status !== "resolved" && ticket.ticketType !== "logistic") {
+        if (updateData.status === "resolved" && existing?.status !== "resolved" && !["logistic", "rnd"].includes(ticket.ticketType)) {
   const msgId = await sendWhatsAppTemplate(ticket, "resolve");
       if (msgId) {
         await Ticket.findByIdAndUpdate(ticket._id, {
