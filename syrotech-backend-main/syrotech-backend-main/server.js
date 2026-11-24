@@ -217,6 +217,7 @@ async function seedSupportPersons() {
 
 // ═══ ONT ═══
 { name: "Harish Bind", email: "harish.bind@syrotech.com", password: "harish123", specialization: ["ONT","EMS/NMS"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
+{ name: "Chetan koli  ", email: "chetan.koli@syrotech.com", password: "chetan123", specialization: ["ONT"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
 { name: "Anuj Kumar", email: "anuj.kumar@syrotech.com", password: "anuj123", specialization: ["ONT","EMS/NMS"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
 { name: "Ayush Sharma", email: "ayush.sharma@syrotech.com", password: "ayush123", specialization: ["ONT","EMS/NMS"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
 { name: "Manish Kumar Singh", email: "manish.singh@syrotech.com", password: "manish123", specialization: ["ONT","EMS/NMS"], level: 1, zone: "all except south", city: "", country: "India", phone: "" },
